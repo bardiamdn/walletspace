@@ -1,0 +1,17 @@
+# Node.js & TypeScript
+node_modules/
+dist/
+*.log
+*.env
+
+# IDEs and Editors
+.vscode/
+
+# Dependency lock files
+package-lock.json
+
+# Keys
+.pem
+
+# Desktp
+desktop.ini
