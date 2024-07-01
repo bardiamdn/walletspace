@@ -8,18 +8,14 @@ import { Transaction } from './entities/Transaction';
 import { Space } from './entities/Space';
 import { Comment } from './entities/Comment';
 
-const AppDataSource = new DataSource({
+export const AppDataSource = new DataSource({
   "type": "postgres",
   "host": "localhost",
   "port": 5432,
   "username": "postgres",
   "password": "myPassword",
   "database": "wallet_space",
-  "logging": true,
+  "logging": false,
   "synchronize": true,
   "entities": [User, Profile, Account, Category, Transaction, Space, Comment]
-  // "entities": ["dist/db/entities/*.js"]   // for npm run build
-  // "entities": ["src/db/entities/*.ts"]      // for npm run dev
 })
-
-export default AppDataSource

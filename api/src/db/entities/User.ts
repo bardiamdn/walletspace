@@ -21,6 +21,9 @@ export class User extends BaseEntity {
   @Column({ type: 'varchar', length: 100 })
   password_salt!: string;
 
+  @Column()
+  email_confirmed!: boolean;
+
   @OneToMany(() => Category, category => category.user)
   categories!: Category[];
 
