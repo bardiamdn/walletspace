@@ -4,6 +4,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { Request, Response, NextFunction } from 'express';
 import { JwtPayload } from 'jsonwebtoken';
+import nodemailer from 'nodemailer';
 
 import { User } from '../db/entities/User';
 import { JWTVerification } from '../types/jwt';
@@ -71,9 +72,50 @@ function authMiddleware(req: Request, res: Response, next: NextFunction): void {
   }
 }
 
+
+// Check email
+function isValidEmail(email: string): boolean {
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  return emailRegex.test(email);
+};
+
+// Confirm email
+async function sendConfirmationEmail(to: string, token: string ): Promise<void> {
+  const transporter = nodemailer.createTransport({
+    host: 'smtp.mailersend.net',
+    port: 587,
+    auth: {
+      user: 'MS_qwdB6o@wallet-space.com',
+      pass: process.env.EMAIL_PASS
+    },
+  });
+  
+  interface MailOptions {
+    from: string;
+    to: string;
+    subject: string;
+    html: string;
+  };
+
+  const mailOptions: MailOptions = {
+    from: 'MS_qwdB6o@wallet-space.com',
+    to: to,
+    subject: 'Confirm Your Email',
+    html: `<p>Click <a href="http://localhost:3000/auth/confirm-email?token=${token}">here</a> to confirm your email address.</p>`
+  };
+
+  try {
+    await transporter.sendMail(mailOptions);
+  } catch (error) {
+    console.error(error);
+  };
+};
+
 export {
   validPassword,
   genPassword,
   issueJWT,
-  authMiddleware
+  authMiddleware,
+  isValidEmail,
+  sendConfirmationEmail
 };
