@@ -8,7 +8,7 @@ import { Space } from './Space';
 import { Comment } from './Comment';
 
 @Entity('users')
-export class User extends BaseEntity {
+export class User {
   @PrimaryGeneratedColumn()
   user_id!: number;
 

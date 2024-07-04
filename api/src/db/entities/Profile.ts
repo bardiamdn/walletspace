@@ -3,7 +3,7 @@ import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, CreateDateColumn, U
 import { User } from "./User";
 
 @Entity('profiles')
-export class Profile extends BaseEntity {
+export class Profile {
   @PrimaryGeneratedColumn()
   profile_id!: number;
 

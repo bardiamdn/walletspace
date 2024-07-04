@@ -20,4 +20,6 @@ app.use(express.json());
 app.use('/auth', authRouter);
 
 
-app.listen(3000, () => console.log("server running on port 3000"))
+// app.listen(3000, () => console.log("server running on port 3000"))
+
+export { app }

@@ -4,7 +4,7 @@ import { User } from "./User";
 import { Transaction } from "./Transaction";
 
 @Entity('accounts')
-export class Account extends BaseEntity {
+export class Account {
   @PrimaryGeneratedColumn()
   account_id!: number;
 

@@ -5,7 +5,7 @@ import { Transaction } from "./Transaction";
 import { Space } from './Space';
 
 @Entity('comments')
-export class Comment extends BaseEntity {
+export class Comment {
   @PrimaryGeneratedColumn()
   comment_id!: number;
 

@@ -7,7 +7,7 @@ import { Comment } from './Comment';
 import { Space } from './Space';
 
 @Entity('transactions')
-export class Transaction extends BaseEntity {
+export class Transaction {
   @PrimaryGeneratedColumn()
   transaction_id!: number;
 
@@ -17,7 +17,8 @@ export class Transaction extends BaseEntity {
   @Column({ type: 'decimal', precision: 10, scale: 2 })
   amount!: number;
 
-  @Column({ type: 'enum', enum: ['income', 'expense', 'transfer'] })
+  // { type: 'enum', enum: ['income', 'expense', 'transfer'] }
+  @Column()
   type!: 'income' | 'expense' | 'transfer';
 
   @ManyToOne(() => Category, category => category.transactions)
@@ -26,7 +27,8 @@ export class Transaction extends BaseEntity {
   @ManyToOne(() => Account, account => account.transactions)
   account!: Account;
 
-  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  // { type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' }
+  @Column()
   date!: Date;
 
   @Column({ type: 'text', nullable: true })
