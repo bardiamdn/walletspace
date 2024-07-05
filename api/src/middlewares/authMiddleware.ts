@@ -20,16 +20,16 @@ export default function authMiddleware(req: Request, res: Response, next: NextFu
           req.jwt = verification;
           next();
         } catch (err) {
-          res.status(401).json({ success: false, msg: "You are not authorized to visit this route" });
+          res.status(401).json({ success: false, message: "You are not authorized to visit this route" });
         }
       } else {
-        res.status(401).json({ success: false, msg: "You are not authorized to visit this route" });
+        res.status(401).json({ success: false, message: "You are not authorized to visit this route" });
       }
     } else {
-      res.status(401).json({ success: false, msg: "Authorization header not found" });
+      res.status(401).json({ success: false, message: "Authorization header not found" });
     }
   } catch (error) {
     console.error(error);
-    res.status(500).json({ success: false, msg: 'Server error' });
+    res.status(500).json({ success: false, message: 'Server error' });
   }
 }
