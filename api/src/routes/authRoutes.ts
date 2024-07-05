@@ -7,8 +7,8 @@ import dotenv from 'dotenv';
 
 import { User } from '../db/entities/User';
 import { Profile } from '../db/entities/Profile';
-import { AppDataSource } from '../db/dataSource';
 // Use AppDataSourceTest for an sqlite test database
+import { AppDataSource } from '../db/dataSource';
 import { AppDataSourceTest } from '../tests/dataSourceTestLite';
 import * as utils from '../lib/utils';
 
@@ -28,8 +28,8 @@ router.post('/register', async (req: Request, res: Response) => {
   }
 
   try {
-    const userRepo = AppDataSourceTest.getRepository(User);
-    const profileRepo = AppDataSourceTest.getRepository(Profile);
+    const userRepo = AppDataSource.getRepository(User);
+    const profileRepo = AppDataSource.getRepository(Profile);
 
     const existingUser = await userRepo.findOne({ where: {email: email} })
     
@@ -45,11 +45,13 @@ router.post('/register', async (req: Request, res: Response) => {
       email_confirmed: false
     });
 
+    await userRepo.save(newUser);
+
     const newProfile = profileRepo.create({
       username: email.split('@')[0],
+      user: newUser
     });
 
-    await userRepo.save(newUser);
     await profileRepo.save(newProfile);
 
     // Issue JWT token and send confirmation email
@@ -69,7 +71,7 @@ router.post('/register', async (req: Request, res: Response) => {
 router.get('/resend-confirm', async (req: Request, res: Response) => {
   const { email } = req.query as { email: string};
   try {
-    const user = await AppDataSourceTest.getRepository(User).findOneBy({ email, email_confirmed: false });
+    const user = await AppDataSource.getRepository(User).findOneBy({ email, email_confirmed: false });
 
     if (!user) {
       return res.status(404).send("<h3>Email doesn't exist or email is already confirmed</h3>" );
@@ -108,14 +110,14 @@ router.get('/confirm-email', async (req: Request, res: Response) => {
     }
 
     // Check user email extracted from token
-    const user = await AppDataSourceTest.getRepository(User).findOne({ where: {email: userVerification.email, email_confirmed: false } });
+    const user = await AppDataSource.getRepository(User).findOne({ where: {email: userVerification.email, email_confirmed: false } });
     
     if (!user) {
       return res.status(404).send('<h3>User not found or email already confirmed</h3>');
     }
 
     user.email_confirmed = true;
-    await AppDataSourceTest.getRepository(User).save(user);
+    await AppDataSource.getRepository(User).save(user);
     console.log("Email confirmed");
 
     return res.status(200).send(`
@@ -133,7 +135,7 @@ router.post('/signin', async (req: Request, res: Response) => {
   const { email, password } = req.body;
 
   try {
-    const user = await AppDataSourceTest.getRepository(User).findOneBy({ email: email }) as User;
+    const user = await AppDataSource.getRepository(User).findOneBy({ email: email }) as User;
 
     if (!user) {
       return res.status(404).json({ success: false, message: 'User not found' });

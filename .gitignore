@@ -11,7 +11,7 @@ dist/
 package-lock.json
 
 # Keys
-.pem
+*.pem
 
 # Desktp
 desktop.ini

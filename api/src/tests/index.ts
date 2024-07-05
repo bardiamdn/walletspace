@@ -18,8 +18,9 @@ const initializeApp = async () => {
     user.password_hash = hash;
     user.password_salt = salt;
     user.email_confirmed = false;
-    profile.username = email;
     await AppDataSourceTest.manager.save(user);
+    profile.username = email;
+    profile.user = user;
     await AppDataSourceTest.manager.save(profile);
     res.status(201).send(`User created with id: ${user.user_id}`);
   });

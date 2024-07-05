@@ -14,9 +14,9 @@ jest.mock('jsonwebtoken', () => ({
 
 describe('Auth Routes', () => {
 
-  afterAll(async () => {
-    await AppDataSource.destroy();
-  });
+  // afterAll(async () => {
+  //   await AppDataSource.destroy();
+  // });
 
   describe('POST /auth/register', () => {
     it('should register a new user', async () => {

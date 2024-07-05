@@ -2,7 +2,9 @@ import express from 'express';
 
 import { AppDataSource } from './db/dataSource';
 
-import authRouter from './routes/auth';
+import authRoutes from './routes/authRoutes';
+import profileRoutes from './routes/profileRoute';
+import authMiddleware from './middlewares/authMiddleware';
 
 AppDataSource
   .initialize()
@@ -17,9 +19,13 @@ const app = express();
 
 app.use(express.json());
 
-app.use('/auth', authRouter);
+app.use('/auth', authRoutes);
+
+app.use('/api', authMiddleware);
+
+app.use('/api/profile', profileRoutes);
 
 
-// app.listen(3000, () => console.log("server running on port 3000"))
+app.listen(3000, () => console.log("server running on port 3000"))
 
 export { app }
