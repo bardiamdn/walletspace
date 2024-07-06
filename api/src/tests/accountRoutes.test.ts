@@ -3,7 +3,7 @@ import { Request, Response, NextFunction } from 'express';
 
 import { Account } from '../db/entities/Account';
 import { app } from '../app';
-import { AppDataSourceTest } from './dataSourceTestLite';
+import { AppDataSource } from './dataSourceTestLite';
 
 import { User } from '../db/entities/User';
 
@@ -24,13 +24,13 @@ beforeAll(async () => {
 	testUser.password_hash = "hash";
 	testUser.password_salt = "salt";
 	testUser.email_confirmed = true;
-	const savedUser = await AppDataSourceTest.manager.save(testUser);
+	const savedUser = await AppDataSource.manager.save(testUser);
 	
 	const testAccount = new Account();
 	testAccount.account_id = 1;
 	testAccount.account_name = "test_account_1";
 	testAccount.user = savedUser;
-	const savedAccount = await AppDataSourceTest.manager.save(testAccount);
+	const savedAccount = await AppDataSource.manager.save(testAccount);
 
 	console.log(savedAccount);
 });

@@ -1,10 +1,10 @@
 import request from 'supertest';
 import jsonwebtoken from 'jsonwebtoken'
 import { app } from '../app';
-import { AppDataSource } from '../db/dataSource';
+// import { AppDataSource } from '../db/dataSource';
 import { User } from '../db/entities/User';
 import * as utils from '../lib/utils';
-import { AppDataSourceTest } from './dataSourceTestLite';
+import { AppDataSource } from './dataSourceTestLite';
 
 
 jest.mock('../lib/utils');
@@ -76,9 +76,9 @@ describe('Auth Routes', () => {
 
   describe('GET /auth/confirm-email', () => {
     it('should confirm the email', async () => {
-      const user = await AppDataSourceTest.manager.findOne(User, {where: {email: "test@example.com"}}) as User;
+      const user = await AppDataSource.manager.findOne(User, {where: {email: "test@example.com"}}) as User;
       user.email_confirmed = false;
-      await AppDataSourceTest.getRepository(User).save(user);
+      await AppDataSource.getRepository(User).save(user);
   
       (jsonwebtoken.verify as jest.Mock).mockReturnValue({
         email: 'test@example.com',
@@ -91,7 +91,7 @@ describe('Auth Routes', () => {
       expect(res.status).toEqual(200);
       expect(res.text).toContain('Email Confirmation Successful!');
   
-      const updatedUser = await AppDataSourceTest.getRepository(User).findOne({ where: { email: 'test@example.com' } });
+      const updatedUser = await AppDataSource.getRepository(User).findOne({ where: { email: 'test@example.com' } });
       expect(updatedUser?.email_confirmed).toBe(true);
     });
   
@@ -122,9 +122,9 @@ describe('Auth Routes', () => {
 
   describe('POST /auth/signin', () => {
     it('should sign in a user', async () => {
-      const userRepo = await AppDataSourceTest.manager.findOne(User, {where: { email: 'test@example.com' }}) as User;
+      const userRepo = await AppDataSource.manager.findOne(User, {where: { email: 'test@example.com' }}) as User;
       userRepo.email_confirmed = true
-      await AppDataSourceTest.manager.save(userRepo);
+      await AppDataSource.manager.save(userRepo);
 
       (utils.validPassword as jest.Mock).mockReturnValue(true);
       (utils.issueJWT as jest.Mock).mockReturnValue({ token: 'Bearer token' });
@@ -153,9 +153,9 @@ describe('Auth Routes', () => {
     });
 
     it('should return 401 for an unconfirmed email', async () => {
-      const userRepo = await AppDataSourceTest.manager.findOne(User, {where: {email: "test@example.com"}}) as User;
+      const userRepo = await AppDataSource.manager.findOne(User, {where: {email: "test@example.com"}}) as User;
       userRepo.email_confirmed = false;
-      await AppDataSourceTest.manager.save(userRepo);
+      await AppDataSource.manager.save(userRepo);
 
       const res = await request(app).post('/auth/signin').send({ email: 'test@example.com', password: 'password' });
 

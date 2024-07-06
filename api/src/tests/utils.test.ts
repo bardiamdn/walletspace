@@ -1,5 +1,5 @@
 import nodemailer from 'nodemailer';
-import { AppDataSourceTest } from "./dataSourceTestLite";
+import { AppDataSource } from "./dataSourceTestLite";
 import * as utils from '../lib/utils';
 import { User } from '../db/entities/User';
 
@@ -90,13 +90,13 @@ describe('Email Utilities', () => {
 
   describe("Issue JWT", () =>{
     it('should create a token and an expires', async ()=> {
-      const user = AppDataSourceTest.manager.create( User, {
+      const user = AppDataSource.manager.create( User, {
         email: "test@example.com",
         password_hash: "hash",
         password_salt: "salt",
         email_confirmed: true
       }) as User;
-      await AppDataSourceTest.manager.save(user);
+      await AppDataSource.manager.save(user);
   
       const userToken = utils.issueJWT(user);
   

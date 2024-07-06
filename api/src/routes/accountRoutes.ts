@@ -1,8 +1,7 @@
 import { Router, Request, Response } from "express";
 
-// Change to AppDataSourceTest on test runs
-import { AppDataSource } from "../db/dataSource"; // Actual database
-import { AppDataSourceTest } from "../tests/dataSourceTestLite"; // For testing
+// import { AppDataSource } from "../db/dataSource"; // Actual database
+import { AppDataSource } from "../tests/dataSourceTestLite"; // For testing
 import { User } from "../db/entities/User";
 import { Account } from "../db/entities/Account";
 
@@ -23,7 +22,7 @@ router.post('/account/:user_id', async (req: Request, res: Response) => {
     const account = await AppDataSource.manager.findOneBy(Account, {account_name: account_name}) as Account;
     
     if(account) {
-      return res.status(400).json({ success: false, message: "Account name already exists, try another name"});
+      return res.status(409).json({ success: false, message: "Account name already exists, try another name"});
     }
     const newAccount = AppDataSource.manager.create(Account, {
       user,
@@ -91,13 +90,21 @@ router.put('/account/:user_id/:account_id', async (req: Request, res: Response) 
       user: { user_id: user_id}, 
       account_id: account_id
     }) as Account;
-
+    
     if (!account) {
-      return res.status(404).json({ success: false, message: 'Account not found' });
+      return res.status(409).json({ success: false, message: 'Account not found' });
     }
-
+    
     if (account_name !== undefined) {
-      account.account_name = account_name;
+      const existingAccountName = await AppDataSource.manager.findOneBy(Account, {
+        user: { user_id: user_id}, 
+        account_name: account_name
+      }) as Account;
+      if (!existingAccountName) {
+        account.account_name = account_name;
+      } else {
+        return res.status(409).json({ success: false, message: "Account name already exists, try another name"});
+      }
     }
     if (balance !== undefined) {
       account.balance = balance;

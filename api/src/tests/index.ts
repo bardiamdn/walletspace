@@ -1,4 +1,4 @@
-import { AppDataSourceTest } from "./dataSourceTestLite";
+import { AppDataSource } from "./dataSourceTestLite";
 import { Profile } from "../db/entities/Profile";
 import { User } from "../db/entities/User";
 import express from "express";
@@ -7,7 +7,7 @@ const app = express();
 app.use(express.json());
 
 const initializeApp = async () => {
-  await AppDataSourceTest.initialize();
+  await AppDataSource.initialize();
   console.log("Test Data Source has been initialized!");
 
   app.post("/users", async (req, res) => {
@@ -18,15 +18,15 @@ const initializeApp = async () => {
     user.password_hash = hash;
     user.password_salt = salt;
     user.email_confirmed = false;
-    await AppDataSourceTest.manager.save(user);
+    await AppDataSource.manager.save(user);
     profile.username = email;
     profile.user = user;
-    await AppDataSourceTest.manager.save(profile);
+    await AppDataSource.manager.save(profile);
     res.status(201).send(`User created with id: ${user.user_id}`);
   });
 
   app.get("/users", async (req, res) => {
-    const users = await AppDataSourceTest.manager.find(User);
+    const users = await AppDataSource.manager.find(User);
     res.json(users);
   });
 };

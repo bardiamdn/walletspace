@@ -8,7 +8,7 @@ import { Space } from '../db/entities/Space';
 import { Comment } from '../db/entities/Comment';
 
 
-export const AppDataSourceTest = new DataSource({
+export const AppDataSource = new DataSource({
   type: 'sqlite',
   database: ":memory:",
   dropSchema: true,

@@ -1,8 +1,7 @@
 import { Router, Request, Response } from "express";
 
-// Change to AppDataSourceTest on test runs
-import { AppDataSource } from "../db/dataSource"; // Actual database
-import { AppDataSourceTest } from "../tests/dataSourceTestLite"; // For testing
+// import { AppDataSource } from "../db/dataSource"; // Actual database
+import { AppDataSource } from "../tests/dataSourceTestLite"; // For testing
 import { Profile } from "../db/entities/Profile";
 
 const router = Router()

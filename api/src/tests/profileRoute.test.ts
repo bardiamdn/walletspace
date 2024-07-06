@@ -3,7 +3,7 @@ import { Request, Response, NextFunction } from 'express';
 
 import { Profile } from '../db/entities/Profile';
 import { app } from '../app';
-import { AppDataSourceTest } from './dataSourceTestLite';
+import { AppDataSource } from './dataSourceTestLite';
 
 import { User } from '../db/entities/User';
 
@@ -24,13 +24,13 @@ beforeAll(async () => {
 	testUser.password_hash = "hash";
 	testUser.password_salt = "salt";
 	testUser.email_confirmed = true;
-	const savedUser = await AppDataSourceTest.manager.save(testUser);
+	const savedUser = await AppDataSource.manager.save(testUser);
 	
 	const testProfile = new Profile();
 	testProfile.profile_id = 1;
 	testProfile.username = "test";
 	testProfile.user = savedUser;
-	const savedProfile = await AppDataSourceTest.manager.save(testProfile);
+	const savedProfile = await AppDataSource.manager.save(testProfile);
 
 	console.log(savedProfile);
 });
@@ -69,7 +69,7 @@ describe('Profile Routes', () => {
 		
 	  it('should return 500 on server error', async () => {
 			// Simulate a server error scenario
-			jest.spyOn(AppDataSourceTest.manager, 'findOne').mockRejectedValueOnce(new Error('Database connection failed'));
+			jest.spyOn(AppDataSource.manager, 'findOne').mockRejectedValueOnce(new Error('Database connection failed'));
 			const testUserId = 1;
 			const response = await request(app)
 			.get(`/api/profile/${testUserId}`)
@@ -90,7 +90,7 @@ describe('PUT /profile/:user_id', () => {
 	expect(response.status).toBe(200);
 	expect(response.body).toEqual({ success: true, message: 'Username updated successfully' });
 
-	const updatedProfile = await AppDataSourceTest.manager.findOne(Profile, { where: { user: { user_id: testUserId } } });
+	const updatedProfile = await AppDataSource.manager.findOne(Profile, { where: { user: { user_id: testUserId } } });
 	expect(updatedProfile?.username).toBe(newUsername);
 	});
 
@@ -107,7 +107,7 @@ describe('PUT /profile/:user_id', () => {
 
 	it('should return 500 on server error', async () => {
 	// Simulate a server error scenario
-	jest.spyOn(AppDataSourceTest.manager, 'findOne').mockRejectedValueOnce(new Error('Database connection failed'));
+	jest.spyOn(AppDataSource.manager, 'findOne').mockRejectedValueOnce(new Error('Database connection failed'));
 	const testUserId = 1;
 	const newUsername = 'new_username';
 	const response = await request(app)

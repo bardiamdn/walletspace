@@ -7,9 +7,8 @@ import dotenv from 'dotenv';
 
 import { User } from '../db/entities/User';
 import { Profile } from '../db/entities/Profile';
-// Use AppDataSourceTest for an sqlite test database
-import { AppDataSource } from '../db/dataSource';
-import { AppDataSourceTest } from '../tests/dataSourceTestLite';
+// import { AppDataSource } from '../db/dataSource';
+import { AppDataSource } from '../tests/dataSourceTestLite';
 import * as utils from '../lib/utils';
 
 dotenv.config();
