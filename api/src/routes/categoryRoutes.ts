@@ -21,14 +21,13 @@ router.post('/category/:user_id', async (req: Request, res: Response) => {
   }
 
   try {
-    const user = await AppDataSource.manager.findOneBy(User, {user_id: user_id}) as User;
     const category = await AppDataSource.manager.findOneBy(Category, {category_name: category_name}) as Category;
     
     if(category) {
       return res.status(409).json({ success: false, message: "Category name already exists, try another name"});
     }
     const newCategory = AppDataSource.manager.create(Category, {
-      user,
+      user: { user_id: user_id},
       category_name,
       category_type: category_type || 'expense',
       category_color: category_color || process.env.BASE_COLOR,

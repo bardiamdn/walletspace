@@ -6,6 +6,7 @@ import authRoutes from './routes/authRoutes';
 import profileRoute from './routes/profileRoute';
 import accountRoutes from './routes/accountRoutes'
 import categoryRoutes from './routes/categoryRoutes'
+import transactionRoutes from './routes/transactionRoutes'
 import authMiddleware from './middlewares/authMiddleware';
 
 // AppDataSource
@@ -28,6 +29,7 @@ app.use('/api', authMiddleware);
 app.use('/api/profile', profileRoute);
 app.use('/api/', accountRoutes);
 app.use('/api/', categoryRoutes);
+app.use('/api/', transactionRoutes);
 
 
 // app.listen(3000, () => console.log("server running on port 3000"))

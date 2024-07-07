@@ -31,9 +31,9 @@ beforeAll(async () => {
 	testCategory.category_type = "expense";
 	testCategory.category_color = "#ffff";
 	testCategory.user = savedUser;
-	const savedAccount = await AppDataSource.manager.save(testCategory);
+	const savedCategory = await AppDataSource.manager.save(testCategory);
 
-	console.log(savedAccount);
+	console.log(savedCategory);
 });
 
 
