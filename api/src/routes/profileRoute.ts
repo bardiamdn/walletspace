@@ -1,14 +1,15 @@
 import { Router, Request, Response } from "express";
 
-// import { AppDataSource } from "../db/dataSource"; // Actual database
-import { AppDataSource } from "../tests/dataSourceTestLite"; // For testing
+import { AppDataSource } from "../db/dataSource"; // Actual database
+// import { AppDataSource } from "../tests/dataSourceTestLite"; // For testing
 import { Profile } from "../db/entities/Profile";
+import authMiddleware from "../middlewares/authMiddleware";
 
 const router = Router()
 
 // GET profile by user_id
-router.get('/:user_id', async (req: Request, res: Response) => {
-  const user_id = parseInt(req.params.user_id, 10);
+router.get('/profile', authMiddleware, async (req: Request, res: Response) => {
+  const user_id = parseInt(req.jwt.sub);
   try {
     const profile = await AppDataSource.manager.findOne(Profile, {
       where: { user: { user_id: user_id } },
@@ -19,17 +20,22 @@ router.get('/:user_id', async (req: Request, res: Response) => {
       return res.status(404).json({ message: 'Profile not found' });
     }
 
-    return res.status(200).json(profile);
+    return res.status(200).json({
+      success: true,
+      message: "Profile data retrieved successfully",
+      profile,
+      authInfo: req.jwt
+    });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: 'Server error' });
   }
 });
 
-// PUT to update profile username by user_id
-router.put('/:user_id', async (req: Request, res: Response) => {
-  const user_id = parseInt(req.params.user_id, 10);
-  const { username } = req.query;
+// PATCH to update profile username by user_id
+router.patch('/profile', authMiddleware, async (req: Request, res: Response) => {
+  const user_id = parseInt(req.jwt.sub);
+  const { username } = req.body;
   try {
     const profile = await AppDataSource.manager.findOne(Profile, {
       where: { user: { user_id: user_id } },
@@ -42,14 +48,16 @@ router.put('/:user_id', async (req: Request, res: Response) => {
     profile.username = username as string;
     await AppDataSource.manager.save(profile);
 
-    return res.status(200).json({ success: true, message: 'Username updated successfully' });
+    return res.status(200).json({ 
+      success: true, 
+      message: 'Username updated successfully',
+      profile,
+      authInfo: req.jwt
+     });
   } catch(error) {
     console.error(error);
     return res.status(500).json({ message: 'Server error' });
   }
 });
-
-// No need for a create (POST) route, since profile is automatically created on register
-// No need for a delete route
 
 export default router;

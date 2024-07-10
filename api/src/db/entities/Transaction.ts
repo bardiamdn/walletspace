@@ -18,7 +18,7 @@ export class Transaction {
   amount!: number;
 
   // { type: 'enum', enum: ['income', 'expense', 'transfer'] }
-  @Column()
+  @Column({ type: 'enum', enum: ['income', 'expense', 'transfer'] }) // type is not recognized on test database
   type!: 'income' | 'expense' | 'transfer';
 
   @ManyToOne(() => Category, category => category.transactions)
@@ -28,7 +28,7 @@ export class Transaction {
   account!: Account;
 
   // { type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' }
-  @Column()
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' }) // type is not recognized on test database
   date!: Date;
 
   @Column({ type: 'text', nullable: true })

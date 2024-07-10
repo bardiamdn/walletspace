@@ -8,8 +8,9 @@ const publicKeyPath = path.join(__dirname, '../utils/', 'id_rsa_pub.pem');
 const PUB_KEY = fs.readFileSync(publicKeyPath, 'utf8');
 
 // Middleware for JWT authentication
-export default function authMiddleware(req: Request, res: Response, next: NextFunction): void {
+export default function authMiddleware(req: Request, res: Response, next: NextFunction): Response | void {
   const token = req.headers.authorization;
+
   try {
     if (token) {
       const tokenParts = token.split(' ');
@@ -17,8 +18,23 @@ export default function authMiddleware(req: Request, res: Response, next: NextFu
         try {
           // Decrypt and verify the token
           const verification = verify(tokenParts[1], PUB_KEY, { algorithms: ['RS256'] }) as JwtPayload;
-          req.jwt = verification;
-          next();
+
+          if (!verification.exp || !verification.iat || !verification.sub) {
+            return res.status(401).json({ success: false, message: "Unauthorized: Missing 'exp' or 'iat' in token" });
+          }
+          
+          const timeToExp = verification.exp - (Date.now() / 1000)
+          // Check expiration date
+          if (timeToExp > 0) {
+            // Exclude email
+            const { email, ...authInfo } = verification
+
+            req.jwt = authInfo;
+            next();
+          } else {
+            res.status(401).json({ success: false, message: "You are not authorized to visit this route" })
+          }
+          
         } catch (err) {
           res.status(401).json({ success: false, message: "You are not authorized to visit this route" });
         }

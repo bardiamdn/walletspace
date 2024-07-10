@@ -3,9 +3,12 @@ import * as jsonwebtoken from 'jsonwebtoken';
 import * as fs from 'fs';
 import * as path from 'path';
 import nodemailer from 'nodemailer';
+import dotenv from 'dotenv'
 
 import { User } from '../db/entities/User';
 import { JWTVerification } from '../types/jwt';
+
+dotenv.config()
 
 const privKeyPath = path.join(__dirname, '../utils/', 'id_rsa_priv.pem');
 const PRIV_KEY = fs.readFileSync(privKeyPath, 'utf8');
@@ -29,7 +32,7 @@ function issueJWT(user: User): { token: string, expires: string } {
   const id = user.user_id;
   const email = user.email;
 
-  const expiresIn = '7d';
+  const expiresIn= process.env.TOKEN_EXPIRATION as string;
 
   const payload: JWTVerification = {
     email: email,

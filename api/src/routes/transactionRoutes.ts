@@ -1,17 +1,18 @@
 import { Router, Request, Response } from "express";
 
-// import { AppDataSource } from "../db/dataSource"; // Actual database
-import { AppDataSource } from "../tests/dataSourceTestLite"; // For testing
+import { AppDataSource } from "../db/dataSource"; // Actual database
+// import { AppDataSource } from "../tests/dataSourceTestLite"; // For testing
 import { User } from "../db/entities/User";
 import { Transaction } from "../db/entities/Transaction";
 import { Space } from "../db/entities/Space";
+import authMiddleware from "../middlewares/authMiddleware";
 
 
 const router = Router();
 
 // POST transaction - create a new transaction
-router.post('/transaction/:user_id', async (req: Request, res: Response) => {
-  const user_id = parseInt(req.params.user_id, 10);
+router.post('/transaction', authMiddleware, async (req: Request, res: Response) => {
+  const user_id = parseInt(req.jwt.sub);
   const { amount, date, type, account_id, category_id, description, space_id } = req.body;
 
   const missingFields = [
@@ -37,7 +38,7 @@ router.post('/transaction/:user_id', async (req: Request, res: Response) => {
       description: description ?? undefined,
     }) as Transaction;
     if(space_id !== undefined) {
-      const space = await AppDataSource.manager.findOne(Space, space_id) as Space;
+      const space = await AppDataSource.manager.findOneBy(Space, space_id) as Space;
       if (space) {
         newTransaction.space = space; 
       }
@@ -46,7 +47,8 @@ router.post('/transaction/:user_id', async (req: Request, res: Response) => {
     return res.status(201).json({ 
       success: true, 
       message: 'Transaction created successfully', 
-      transaction: newTransaction
+      transaction: newTransaction,
+      authInfo: req.jwt
 		});
 	} catch (error) {
     console.error(error);
@@ -54,14 +56,20 @@ router.post('/transaction/:user_id', async (req: Request, res: Response) => {
   }
 });
 
+// Implement pagination
 // GET transactions of a user
-router.get('/transactions/:user_id', async (req: Request, res: Response) => {
-  const user_id = parseInt(req.params.user_id, 10);
+router.get('/transactions', authMiddleware, async (req: Request, res: Response) => {
+  const user_id = parseInt(req.jwt.sub);
   
   try {
     const transactions = await AppDataSource.manager.findBy(Transaction, { user: { user_id: user_id } }) as Transaction[];
     
-    return res.status(200).json({ transactions: transactions });
+    return res.status(200).json({ 
+      sueccess: true, 
+      message: "Data retrieved successfully", 
+      transactions: transactions, 
+      authInfo: req.jwt 
+    });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ success: false, message: 'Server error'})
@@ -69,8 +77,8 @@ router.get('/transactions/:user_id', async (req: Request, res: Response) => {
 });
 
 // GET transaction info
-router.get('/transaction/:user_id/:transaction_id', async (req: Request, res: Response) => {
-  const user_id = parseInt(req.params.user_id, 10);
+router.get('/transaction/:transaction_id', authMiddleware, async (req: Request, res: Response) => {
+  const user_id = parseInt(req.jwt.sub);
   const transaction_id = parseInt(req.params.transaction_id, 10);
   
   try {
@@ -79,16 +87,21 @@ router.get('/transaction/:user_id/:transaction_id', async (req: Request, res: Re
       transaction_id: transaction_id
     }) as Transaction;
 
-    return res.status(200).json({transaction: transaction})
+    return res.status(200).json({ 
+      succcess: true,
+      message: "Data retrieved successfully",
+      transaction: transaction,
+      authInfo: req.jwt
+    });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ success: false, message: 'Server error'})
   }
 });
 
-// PUT transaction - update a transaction
-router.put('/transaction/:user_id/:transaction_id', async (req: Request, res: Response) => {
-  const user_id = parseInt(req.params.user_id, 10);
+// PATCH transaction - update a transaction
+router.patch('/transaction/:transaction_id', authMiddleware, async (req: Request, res: Response) => {
+  const user_id = parseInt(req.jwt.sub);
   const transaction_id = parseInt(req.params.transaction_id, 10);
   const { amount, date, type, account, category, description, space, comments } = req.body;
   
@@ -123,7 +136,8 @@ router.put('/transaction/:user_id/:transaction_id', async (req: Request, res: Re
     return res.status(200).json({ 
       success: true, 
       message: 'Transaction updated successfully', 
-      updatedTransaction 
+      updatedTransaction,
+      authInfo: req.jwt
     });
   } catch (error) {
     console.error(error);
@@ -132,8 +146,8 @@ router.put('/transaction/:user_id/:transaction_id', async (req: Request, res: Re
 });
 
 // // DELETE a transaction
-router.delete('/transaction/:user_id/:transaction_id', async (req: Request, res: Response) => {
-  const user_id = parseInt(req.params.user_id, 10);
+router.delete('/transaction/:transaction_id', authMiddleware, async (req: Request, res: Response) => {
+  const user_id = parseInt(req.jwt.sub);
   const transaction_id = parseInt(req.params.transaction_id, 10);
   
   try {
@@ -148,7 +162,12 @@ router.delete('/transaction/:user_id/:transaction_id', async (req: Request, res:
 
     await AppDataSource.manager.delete(Transaction, transaction_id);
 
-    return res.status(200).json({ success: true, message: 'Transaction deleted successfully', deletedTransaction: transaction });
+    return res.status(200).json({ 
+      success: true, 
+      message: 'Transaction deleted successfully', 
+      deletedTransaction: transaction,
+      authInfo: req.jwt
+    });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ success: false, message: 'Server error'})

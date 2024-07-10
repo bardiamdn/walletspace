@@ -6,6 +6,7 @@ import { Account } from './entities/Account';
 import { Category } from './entities/Category';
 import { Transaction } from './entities/Transaction';
 import { Space } from './entities/Space';
+import { Invitation } from './entities/Invitation';
 import { Comment } from './entities/Comment';
 
 export const AppDataSource = new DataSource({
@@ -17,5 +18,5 @@ export const AppDataSource = new DataSource({
   "database": "wallet_space",
   "logging": false,
   "synchronize": true,
-  "entities": [User, Profile, Account, Category, Transaction, Space, Comment]
+  "entities": [User, Profile, Account, Category, Transaction, Space, Invitation, Comment]
 })

@@ -7,8 +7,8 @@ import dotenv from 'dotenv';
 
 import { User } from '../db/entities/User';
 import { Profile } from '../db/entities/Profile';
-// import { AppDataSource } from '../db/dataSource';
-import { AppDataSource } from '../tests/dataSourceTestLite';
+import { AppDataSource } from '../db/dataSource';
+// import { AppDataSource } from '../tests/dataSourceTestLite';
 import * as utils from '../lib/utils';
 
 dotenv.config();
@@ -23,7 +23,7 @@ router.post('/register', async (req: Request, res: Response) => {
   const { email, password } = req.body;
   
   if(!utils.isValidEmail(email)) {
-    return res.status(400).json({ succcess: false, message: "Please provide a real email"});
+    return res.status(400).json({ succcess: false, message: "Please provide your email and password"});
   }
 
   try {
@@ -73,7 +73,7 @@ router.get('/resend-confirm', async (req: Request, res: Response) => {
     const user = await AppDataSource.getRepository(User).findOneBy({ email, email_confirmed: false });
 
     if (!user) {
-      return res.status(404).send("<h3>Email doesn't exist or email is already confirmed</h3>" );
+      return res.status(404).send("<h3>Email doesn't exist or is already confirmed</h3>" );
     }
     const { token } = utils.issueJWT(user);
     await utils.sendConfirmationEmail(email, token.split(' ')[1]);
@@ -125,7 +125,7 @@ router.get('/confirm-email', async (req: Request, res: Response) => {
     `)
   } catch (error) {
     console.error('Error confirming email:', error);
-    return res.status(500).send('<h3>An error occuer</h3>');
+    return res.status(500).send('<h3>An error occurred</h3>');
   }
 });
 
