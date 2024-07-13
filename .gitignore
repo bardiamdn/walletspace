@@ -33,10 +33,17 @@ npm-debug.log
 yarn-error.log
 testem.log
 /typings
+desktop.ini
+*.log
+*.env
 
 # System Files
 .DS_Store
 Thumbs.db
 
+# Keys
+*.pem
+
 .nx/cache
 .nx/workspace-data
+.nx/installation

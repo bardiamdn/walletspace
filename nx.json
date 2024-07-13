@@ -37,5 +37,18 @@
       "exclude": ["apps/api-e2e/**/*"]
     }
   ],
+  "installation": {
+    "version": "19.4.3",
+    "plugins": {
+      "@nx/jest": "19.4.2",
+      "@nx/eslint": "19.4.2",
+      "@nx/express": "19.4.2",
+      "@nx/js": "19.4.2",
+      "@nx/node": "19.4.2",
+      "@nx/web": "19.4.2",
+      "@nx/webpack": "19.4.2",
+      "@nx/workspace": "19.4.2"
+    }
+  },
   "nxCloudAccessToken": "YTg3YjI5ZDYtMThmOS00M2VkLTlkOTctYmEwYjRkZmZjNGI2fHJlYWQtd3JpdGU="
 }
