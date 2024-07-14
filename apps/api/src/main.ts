@@ -2,14 +2,14 @@ import express from 'express';
 
 import { AppDataSource } from './db/dataSource';
 
-import authRoutes from './routes/authRoutes';
-import profileRoute from './routes/profileRoute';
-import accountRoutes from './routes/accountRoutes';
-import categoryRoutes from './routes/categoryRoutes';
-import transactionRoutes from './routes/transactionRoutes';
-import spaceRoutes from './routes/spaceRoutes';
-import invitationRoute from './routes/invitationRoutes';
-import commentRoutes from './routes/commentRoute'
+import authRoutes from './routes/auth.route';
+import profileRoute from './routes/profile.route';
+import accountRoutes from './routes/account.route';
+import categoryRoutes from './routes/category.route';
+import transactionRoutes from './routes/transaction.route';
+import spaceRoutes from './routes/space.route';
+import invitationRoute from './routes/invitation.route';
+import commentRoutes from './routes/comment.Route'
 
 
 AppDataSource

@@ -4,7 +4,7 @@ import { Request, Response, NextFunction } from 'express';
 import { JwtPayload } from 'jsonwebtoken';
 import { verify } from 'jsonwebtoken';
 
-const publicKeyPath = path.join(__dirname, '@keys', 'id_rsa_pub.pem');
+const publicKeyPath = path.join('./libs/keys/', 'id_rsa_pub.pem');
 const PUB_KEY = fs.readFileSync(publicKeyPath, 'utf8');
 
 // Middleware for JWT authentication
@@ -23,11 +23,8 @@ export default function authMiddleware(req: Request, res: Response, next: NextFu
             return res.status(401).json({ success: false, message: "Unauthorized: Missing 'exp' or 'iat' in token" });
           }
           
-          const timeToExp = verification.exp - (Date.now() / 1000)
+          const timeToExp = verification.exp - Date.now()
           // Check expiration date
-          console.log("EXP: ", verification.exp)
-          console.log("NOW: ", Date.now())
-          console.log("USER: ", verification.sub)
           if (timeToExp > 0) {
             // Exclude email
             const { email, ...authInfo } = verification

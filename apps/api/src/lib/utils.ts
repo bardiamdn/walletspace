@@ -10,7 +10,7 @@ import { JWTVerification } from '../types/jwt';
 
 dotenv.config()
 
-const privKeyPath = path.join(__dirname, '@keys', 'id_rsa_priv.pem');
+const privKeyPath = path.join('./libs/keys/', 'id_rsa_priv.pem');
 const PRIV_KEY = fs.readFileSync(privKeyPath, 'utf8');
 
 

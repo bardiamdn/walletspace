@@ -12,7 +12,7 @@ import { AppDataSource } from '../db/dataSource';
 import * as utils from '../lib/utils';
 
 dotenv.config();
-const publicKeyPath = path.join(__dirname, '@keys', 'id_rsa_pub.pem');
+const publicKeyPath = path.join('./libs/keys/', 'id_rsa_pub.pem');
 const PUB_KEY = fs.readFileSync(publicKeyPath, 'utf8');
 
 
