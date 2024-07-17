@@ -2,6 +2,7 @@
   "expo": {
     "name": "Mobile",
     "slug": "mobile",
+    "scheme": "mobile-walletspace",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -27,6 +28,8 @@
       "favicon": "./assets/favicon.png",
       "bundler": "metro"
     },
-    "plugins": []
+    "plugins": [
+      "expo-router"
+    ]
   }
 }
