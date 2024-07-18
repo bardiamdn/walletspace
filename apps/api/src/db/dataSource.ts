@@ -8,6 +8,7 @@ import { Transaction } from './entities/Transaction';
 import { Space } from './entities/Space';
 import { Invitation } from './entities/Invitation';
 import { Comment } from './entities/Comment';
+import { Scan } from './entities/Scan';
 
 export const AppDataSource = new DataSource({
   "type": "postgres",
@@ -18,5 +19,5 @@ export const AppDataSource = new DataSource({
   "database": "wallet_space",
   "logging": false,
   "synchronize": true,
-  "entities": [User, Profile, Account, Category, Transaction, Space, Invitation, Comment]
+  "entities": [User, Profile, Account, Category, Transaction, Space, Invitation, Comment, Scan]
 })

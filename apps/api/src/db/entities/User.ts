@@ -6,6 +6,7 @@ import { Profile } from './Profile';
 import { Transaction } from './Transaction';
 import { Space } from './Space';
 import { Comment } from './Comment';
+import { Scan } from './Scan';
 
 @Entity('users')
 export class User {
@@ -38,6 +39,9 @@ export class User {
   
   @OneToMany(() => Comment, comment => comment.user)
   commets!: Comment[];
+  
+  @OneToMany(() => Scan, scan => scan.user)
+  scans!: Scan[];
 
   @CreateDateColumn()
   created_at!: Date;

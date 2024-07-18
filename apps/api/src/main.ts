@@ -9,7 +9,8 @@ import categoryRoutes from './routes/category.route';
 import transactionRoutes from './routes/transaction.route';
 import spaceRoutes from './routes/space.route';
 import invitationRoute from './routes/invitation.route';
-import commentRoutes from './routes/comment.Route'
+import commentRoutes from './routes/comment.route'
+import scannerRoute from './routes/scanner.route'
 
 
 AppDataSource
@@ -34,6 +35,7 @@ app.use('/', transactionRoutes);
 app.use('/', spaceRoutes);
 app.use('/', invitationRoute);
 app.use('/', commentRoutes);
+app.use('/', scannerRoute)
 
 
 app.listen(3000, () => console.log("server running on port 3000"))

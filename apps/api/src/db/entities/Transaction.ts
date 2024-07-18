@@ -1,10 +1,11 @@
 import 'reflect-metadata'
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, CreateDateColumn, UpdateDateColumn, ManyToOne, OneToMany, OneToOne } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, CreateDateColumn, UpdateDateColumn, ManyToOne, OneToMany, OneToOne, JoinColumn } from "typeorm";
 import { User } from "./User";
 import { Category } from "./Category";
 import { Account } from "./Account";
 import { Comment } from './Comment';
 import { Space } from './Space';
+import { Scan } from './Scan';
 
 @Entity('transactions')
 export class Transaction {
@@ -39,6 +40,10 @@ export class Transaction {
 
   @OneToMany(() => Comment, comment => comment.transaction)
   comments!: Comment;
+
+  @OneToOne(() => Scan, scan => scan.scan_id)
+  @JoinColumn()
+  scan!: Scan
 
   @CreateDateColumn()
   created_at!: Date;
