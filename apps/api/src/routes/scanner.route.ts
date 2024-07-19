@@ -18,20 +18,25 @@ const storage = multer.diskStorage({
   }
 });
 
-const upload = multer({ storage: storage });
+const upload = multer({ 
+  storage: storage,
+  limits: {
+    fieldSize: 25 * 1024 * 1024, // Increase the field size limit to 25MB
+    fileSize: 25 * 1024 * 1024, // Increase the file size limit to 25MB
+  }
+});
 
 // POST endpoint to upload a single image
 router.post('/scanner', authMiddleware, upload.single('image'), async (req: Request, res: Response, next: NextFunction) => {
   const file = req.file as Express.Multer.File;
 
   if (!file) {
-    const error = new Error('Please upload a file') as any;
-    error.httpStatusCode = 400;
-    return next(error);
+    console.log("File does not exist")
+    return res.status(404).json({ success: false, message: 'file does not exist' });
   }
-
+  console.log(file)
   try{
-    const scan = AppDataSource.manager.create(Scan);;
+    const scan = AppDataSource.manager.create(Scan);
     scan.user = req.user;
     scan.field_name = file.fieldname;
     scan.original_name = file.originalname;
@@ -43,10 +48,7 @@ router.post('/scanner', authMiddleware, upload.single('image'), async (req: Requ
     scan.size = file.size;
   
     await AppDataSource.manager.save(scan);
-    console.log("Scan: ", scan)
-
-    console.log("New Image File:", file)
-    return res.status(200).send(file); // Send response with file details
+    return res.status(200).json({ file: file, authInfo: req.jwt });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: 'Server error' });

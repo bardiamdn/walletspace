@@ -37,7 +37,7 @@ function issueJWT(user: User): { token: string, expires: string } {
   const payload: JWTVerification = {
     email: email,
     sub: id,            // Subject
-    iat: Date.now()     // Issued at
+    iat: Math.floor(Date.now() / 1000)     // Issued at
   };
 
   const signedToken: string = jsonwebtoken.sign(payload, PRIV_KEY, { expiresIn: expiresIn, algorithm: 'RS256'});
