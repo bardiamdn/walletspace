@@ -19,8 +19,8 @@ export default () => {
 			name="Manual"
 			options={{
         tabBarIcon: () => <Entypo name="add-to-list" size={24} color="black" />,
-        headerShown: false,
-				headerTitle: "Manula Entry",
+        headerShown: true,
+				headerTitle: "Manual Entry",
 				title: "Manual",
 			}}
 			/>

@@ -17,8 +17,9 @@ export default () => {
 			name="Add"
 			options={{
 				tabBarIcon: () => <AntDesign name="pluscircle" size={24} color="black" />,
-				headerTitle: "Add a Record",
-				title: "Add",
+				headerShown: false,
+				// headerTitle: "Add a Record",
+				// title: "Add",
 			}}
 			/>
 			<Tabs.Screen

@@ -15,6 +15,9 @@ export class Scan {
   @Column({ type: 'varchar' })
   field_name!: string;
 
+  @Column({ type: 'jsonb', nullable: true })
+  document_data!: any;
+ 
   @Column({ type: 'varchar', nullable: false })
   original_name!: string;
 

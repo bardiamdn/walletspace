@@ -1,19 +1,76 @@
 import { Camera, CameraView, useCameraPermissions, CameraType, CameraPictureOptions } from 'expo-camera';
 import React, { useState, useRef, useEffect } from 'react';
-import { Button, StyleSheet, Text, TouchableOpacity, View, Image } from 'react-native';
-import * as FileSystem from 'expo-file-system';
+import { Button, StyleSheet, Text, TouchableOpacity, View, ScrollView, ActivityIndicator } from 'react-native';
+import Markdown from 'react-native-markdown-display';
+// import * as FileSystem from 'expo-file-system';
 import axios from 'axios';
 import FormData from 'form-data'
-import Feather from '@expo/vector-icons/Feather';
-import { MaterialIcons } from '@expo/vector-icons';
+import { MaterialIcons, Feather } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 
 export default function App() {
   const [facing, setFacing] = useState<CameraType>('back');
   const [cameraPermission, requestCameraPermission] = useCameraPermissions();
-  const [cameraReady, setCameraReady] = useState<boolean>(false)
+  const [cameraReady, setCameraReady] = useState<boolean>(false);
+  const [markdownResponse, setMarkdownResponse] = useState<string>('');
+  const [loading, setLoading] = useState(false)
+  const [size, setSize] = useState({
+    width: 100,
+    height: 160
+  });
   const cameraRef = useRef<CameraView | any>(null);
+
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      justifyContent: 'center',
+    },
+    camera: {
+      flex: 1,
+      position: 'relative',
+    },
+    resPreview: {
+      width: size.width,
+      height: size.height,
+      marginTop: 10,
+      marginLeft: 10,
+      backgroundColor: "#ffff",
+    },
+    buttonContainer: {
+      flex: 1,
+      flexDirection: 'row',
+      backgroundColor: 'transparent',
+      margin: 64,
+    },
+    flp_button: {
+      flex: 1,
+      alignSelf: 'flex-end',
+      alignItems: 'center',
+    },
+    cpr_button: {
+      flex: 2,
+      alignSelf: 'flex-end',
+      alignItems: 'center',
+    },
+    text: {
+      fontSize: 20,
+      fontWeight: 'bold',
+      color: 'black',
+      alignSelf: 'center',
+    },
+    markdownContainer: {
+      flex: 1,
+      width: 500
+      // padding: 20,
+    },
+    loadingContainer: {
+      ...StyleSheet.absoluteFillObject,
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    },
+  });
 
   if (!cameraPermission) {
     // Camera permissions are still loading.
@@ -21,7 +78,7 @@ export default function App() {
       <View>
         <Text>Loading...</Text>
       </View>
-    );
+    ); 
   }
 
   if (!cameraPermission.granted) {
@@ -58,10 +115,11 @@ export default function App() {
           const formData = new FormData();
           formData.append('image', {
             uri: uri,
-            type: 'image/jpg',
+            type: 'image/jpeg',
             name: 'photo.jpg',
           });
 
+          setLoading(true)
           const response = await axios.post('http://192.168.1.184:3000/scanner',
             formData, {
             headers: {
@@ -69,8 +127,9 @@ export default function App() {
               'Authorization': process.env.EXPO_PUBLIC_TOKEN as string,
             }
           });
-
-          const responseJson = await response.data;
+          console.log(response.data.document)
+          setMarkdownResponse(response.data.document);
+          setLoading(false)
         } else {
           console.log('Photo does not exist')
         };
@@ -85,6 +144,20 @@ export default function App() {
     // }
   }
 
+  const changeSize = () => {
+    if(size.width === 100 && size.height === 160) {
+      setSize({
+        width: 250,
+        height: 400
+      })
+    } else if (size.width === 250 && size.height === 400) {
+      setSize({
+        width: 100,
+        height: 160
+      })
+    }
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <CameraView 
@@ -94,7 +167,26 @@ export default function App() {
       animateShutter={true}
       onCameraReady={() => (setCameraReady(true))}
       >
-            {/* <Image style={styles.preview} source={{ uri: "data:image/jpg;base64," + photo.base64 }}/> */}
+        <View style={styles.resPreview}>
+          {markdownResponse && !loading ? (
+            <ScrollView  horizontal={true}>
+              <ScrollView style={styles.markdownContainer}>
+                <TouchableOpacity onPress={changeSize}>
+                  <Text>
+                    Change Size
+                  </Text>
+                </TouchableOpacity>
+                <Markdown>{markdownResponse}</Markdown>
+              </ScrollView>
+            </ScrollView>
+          ) : loading ?
+            <View style={styles.loadingContainer}>
+              <ActivityIndicator size="large" color="#ffffff" />
+            </View>
+            :
+            null
+          }
+        </View>
         <View style={styles.buttonContainer}>
           <TouchableOpacity style={styles.flp_button} onPress={toggleCameraFacing}>
             <MaterialIcons name="flip-camera-android" size={24} color="white" />
@@ -108,44 +200,3 @@ export default function App() {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-  },
-  camera: {
-    flex: 1,
-  },
-  buttonContainer: {
-    flex: 1,
-    flexDirection: 'row',
-    backgroundColor: 'transparent',
-    margin: 64,
-  },
-  photoContainer: {
-    flex: 3,
-    alignContent: 'flex-end',
-    alignItems: 'center',
-  },
-  flp_button: {
-    flex: 1,
-    alignSelf: 'flex-end',
-    alignItems: 'center',
-  },
-  cpr_button: {
-    flex: 2,
-    alignSelf: 'flex-end',
-    alignItems: 'center',
-  },
-  text: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: 'white',
-  },
-  preview: {
-    width:15,
-    height:25,
-    alignSelf: 'stretch',
-    flex: 1
-  }
-});

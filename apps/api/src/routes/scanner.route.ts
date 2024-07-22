@@ -4,6 +4,7 @@ import { promises as fs } from 'fs';
 import path from 'path';
 import dotenv from 'dotenv';
 import { DocumentProcessorServiceClient } from '@google-cloud/documentai'
+import { GoogleGenerativeAI } from '@google/generative-ai'
 
 import authMiddleware from '../middlewares/authMiddleware';
 import { Scan } from '../db/entities/Scan';
@@ -75,11 +76,34 @@ router.post('/scanner', authMiddleware, upload.single('image'), async (req: Requ
       fieldMask: { paths: ['text'] }
     };
 
-    const [result] = await client.processDocument(documentAIRequest);
-    const { document } = result;
+    const [resultDocAI] = await client.processDocument(documentAIRequest);
+    const { document } = resultDocAI;
+
+    const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY as string);
+
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash"});
+    
+    // { type: , categoryName: { subCategoryName: [ name, price, discount, pricePerUnit, ... ], ... }, ... }
+    const prompt = document?.text + "\n" + "Can you extract all the information from this scanned receipt, define if it is an expense or income, then put the purchased items extracted from it into categories and subcategories and lastely parse the data to json format";
+
+    // Image can be attached to the prompt if needed
+    // const image = {
+    //   inlineData: {
+    //     data: encodedImage,
+    //     mimeType: file.mimetype,
+    //   }
+    // }
+
+    // const result = await model.generateContent([prompt, image]);
+    const result = await model.generateContent(prompt);
+    const response = result.response;
+    const text = response.text();
+    console.log(text);
+
+    scan.document_data = text;
   
     await AppDataSource.manager.save(scan);
-    return res.status(200).json({ file: file, authInfo: req.jwt, document: document });
+    return res.status(200).json({ file: file, authInfo: req.jwt, document: text });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: 'Server error' });
