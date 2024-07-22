@@ -8,6 +8,7 @@
     "@expo/metro-config": "~0.18.1",
     "@expo/metro-runtime": "~3.2.1",
     "@expo/vector-icons": "^14.0.2",
+    "@google-cloud/documentai": "^8.8.0",
     "axios": "^1.7.2",
     "bcrypt": "^5.1.1",
     "dotenv": "^16.4.5",
