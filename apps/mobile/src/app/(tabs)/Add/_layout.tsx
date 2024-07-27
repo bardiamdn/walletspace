@@ -1,29 +1,19 @@
-import { Tabs } from "expo-router";
-import AntDesign from '@expo/vector-icons/AntDesign';
-import { Ionicons } from '@expo/vector-icons';
-import { Entypo } from '@expo/vector-icons';
+import { Stack } from "expo-router";
 
-export default () => {
-	return (
-		<Tabs>
-      <Tabs.Screen
-      name="Scan"
-      options={{
-        tabBarIcon: () => <Ionicons name="scan" size={24} color="black" />,
-        headerShown: false,
-        headerTitle: "Scan a new recoed",
-        title: "Scan",
-      }}
-      />
-			<Tabs.Screen
-			name="Manual"
-			options={{
-        tabBarIcon: () => <Entypo name="add-to-list" size={24} color="black" />,
-        headerShown: true,
-				headerTitle: "Manual Entry",
-				title: "Manual",
-			}}
-			/>
-		</Tabs>
-	)
+const AddStack = () => {
+  return (
+    // <View style={styles.container}>
+      <Stack
+        screenOptions={{
+          headerShown: false,
+        }}
+      >
+        <Stack.Screen name="scan" options={{ title: 'Scan' }} />
+        <Stack.Screen name="manual" options={{ title: 'Manual' }} />
+      </Stack>
+      //  <BottomNavigation /> 
+    //  </View> 
+  );
 }
+
+export default AddStack;

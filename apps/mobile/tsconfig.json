@@ -8,7 +8,12 @@
     "skipLibCheck": true,
     "resolveJsonModule": true,
     "strict": true,
-    "declaration": true
+    "declaration": true,
+    "paths": {
+      "@/*": [
+        "./apps/mobile/*"
+      ]
+    }
   },
   "files": [],
   "include": [],

@@ -10,6 +10,7 @@ import { Profile } from '../db/entities/Profile';
 import { AppDataSource } from '../db/dataSource';
 // import { AppDataSource } from '../tests/dataSourceTestLite';
 import * as utils from '../lib/utils';
+import authMiddleware from '../middlewares/authMiddleware';
 
 dotenv.config();
 const publicKeyPath = path.join('./libs/keys/', 'id_rsa_pub.pem');
@@ -147,7 +148,7 @@ router.post('/signin', async (req: Request, res: Response) => {
 
     if (validation) {
       const authInfo = utils.issueJWT(user);
-      return res.status(200).json({ success: true, authInfo: authInfo });
+      return res.status(200).json({ success: true, message: 'Successfully signed in',authInfo: authInfo });
     } else {
       return res.status(401).json({ success: false, message: 'Authentication failed' });
     }
@@ -159,6 +160,10 @@ router.post('/signin', async (req: Request, res: Response) => {
 
 // Reset password
 // Delete account
+
 // Authenticated check
+router.get('/validate', authMiddleware, (req: Request, res: Response) => {
+  return res.status(200).json({ success: true, message: 'You are authenticated', authInfo: req.jwt })
+})
 
 export default router;
