@@ -4,7 +4,7 @@ import React from "react"
 const Add = () => {
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>
+      <Text style={{backgroundColor: 'white'}}>
         See Your Spaces
       </Text>
     </View>

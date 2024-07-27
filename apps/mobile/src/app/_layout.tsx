@@ -35,10 +35,10 @@ function RootNavigation() {
   const colorScheme = useColorScheme();
   const { authenticated } = useAuth();
   const router = useRouter();
-  const [routeName, setRouteName] = useState<'(tabs)' | '(auth)' | undefined>();
+  const [routeName, setRouteName] = useState<'(protected)' | '(auth)' | undefined>();
 
   useEffect(() => {
-    setRouteName(authenticated ? '(tabs)' : '(auth)');
+    setRouteName(authenticated ? '(protected)' : '(auth)');
     if (routeName !== undefined) {
       router.replace(routeName);
       SplashScreen.hideAsync();
