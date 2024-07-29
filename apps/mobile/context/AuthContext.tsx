@@ -1,18 +1,24 @@
 import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
 // import { QueryClient, QueryClientProvider, useMutation, useQuery } from '@tanstack/react-query';
 import axios from 'axios'
+import * as SecureStore from 'expo-secure-store';
 
 interface AuthContextType {
-  authenticated: boolean;
-  setAuthenticated: React.Dispatch<React.SetStateAction<boolean>>;
+  authenticated: boolean | undefined;
+  setAuthenticated: React.Dispatch<React.SetStateAction<boolean | undefined>>;
 }
+const validateUrl = process.env.EXPO_PUBLIC_API_URL_DEV + '/auth/validate'
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 // const queryClient = new QueryClient();
 
-const checkAuthentication = async (): Promise<boolean> => {
+const checkAuthentication = async (token: string | null): Promise<boolean> => {
   try {
-    const response = await axios.get('http://localhost:3000/auth/check');
+    const response = await axios.get(validateUrl, {
+      headers: {
+        Authorization: token,
+      },
+    });
     
     return response? response.status === 200 : false
   } catch (error) {
@@ -22,7 +28,7 @@ const checkAuthentication = async (): Promise<boolean> => {
 }
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [authenticated, setAuthenticated] = useState<boolean>(true);
+  const [authenticated, setAuthenticated] = useState<boolean | undefined>();
   
   // const { data: isAuthenticated, isLoading } = useQuery({
   //   queryKey: ['authCheck'],
@@ -38,7 +44,15 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   useEffect(() => {
     const fetchAuthStatus = async () => {
-      setAuthenticated(await checkAuthentication());
+      try {
+        const token = await SecureStore.getItemAsync('authToken');
+        
+        const isAuthenticated = await checkAuthentication(token);
+        setAuthenticated(isAuthenticated);
+      } catch (error) {
+        console.error('Error fetching authentication status:', error);
+        setAuthenticated(false);
+      }
     };
     fetchAuthStatus();
   }, []);
