@@ -126,3 +126,7 @@ cache/
 
 # Uploads
 uploads/*
+
+# Next.js
+.next
+out
