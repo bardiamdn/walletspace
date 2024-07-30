@@ -68,7 +68,7 @@ router.post('/register', async (req: Request, res: Response) => {
 });
 
 // Resend verification email
-router.get('/resend-confirm', async (req: Request, res: Response) => {
+router.get('/resend-email', async (req: Request, res: Response) => {
   const { email } = req.query as { email: string};
   try {
     const user = await AppDataSource.getRepository(User).findOneBy({ email, email_confirmed: false });
@@ -101,11 +101,11 @@ router.get('/confirm-email', async (req: Request, res: Response) => {
     
     // Check the timeout
     const issuedAt = Math.floor(userVerification.iat);
-    const currentTime = Math.floor(Date.now());
-    if (currentTime - issuedAt > 300_000) { // 300 seconds
+    const currentTime = Math.floor(Date.now() / 1000);
+    if (currentTime - issuedAt > 300) { // 300 seconds
       return res.status(400).send(`
         <h3>Email Confirmation Failed!</h3>
-        <p>Your token is expired. <a href="/auth/resend-confirm?email=${userVerification.email}">Resend</a> the verification email.</p>
+        <p>Your token is expired. <a href="/auth/resend-email?email=${userVerification.email}">Resend</a> the verification email.</p>
       `)
     }
 
@@ -148,7 +148,19 @@ router.post('/signin', async (req: Request, res: Response) => {
 
     if (validation) {
       const authInfo = utils.issueJWT(user);
-      return res.status(200).json({ success: true, message: 'Successfully signed in',authInfo: authInfo });
+      return res
+      .status(200)
+      .cookie('authToken', authInfo.token.split(' ')[1],{
+        httpOnly: true,
+        // secure: process.env.NODE_ENV === 'production',
+        // sameSite: 'strict',
+        secure: process.env.NODE_ENV === 'production', // Enable secure in production
+        sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax', // Adjust for development
+        path: '/', 
+         // expires either in days or hours and defaults to 1 day
+        maxAge: authInfo.expires.includes('d') ?  parseInt(authInfo.expires) * 24 * 60 * 60 * 1000 : authInfo.expires.includes('h') ? parseInt(authInfo.expires) * 60 * 1000 : 24 * 60 * 60 * 1000
+      })
+      .json({ success: true, message: 'Successfully signed in',authInfo: authInfo });
     } else {
       return res.status(401).json({ success: false, message: 'Authentication failed' });
     }

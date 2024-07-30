@@ -1,4 +1,5 @@
 import express from 'express';
+import cors from 'cors';
 
 import { AppDataSource } from './db/dataSource';
 
@@ -23,6 +24,13 @@ AppDataSource
   })
 
 const app = express();
+
+app.use(cors({
+  origin: 'http://localhost:3001', // Adjust later for production
+  methods: 'GET,POST,PUT,PATCH,DELETE',
+  credentials: true, 
+  allowedHeaders: 'Authorization, Content-Type',
+}));
 
 app.use(express.json());
 
