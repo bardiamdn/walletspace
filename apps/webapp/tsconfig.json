@@ -19,7 +19,12 @@
     "types": [
       "jest",
       "node"
-    ]
+    ],
+    "paths": {
+      "@/*": [
+        "./apps/webapp/*"
+      ]
+    }
   },
   "include": [
     "**/*.ts",

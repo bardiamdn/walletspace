@@ -1,0 +1,12 @@
+.gradientOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to right, var(--color-text-primary), #838383);
+  opacity: 0.1;
+  transition: opacity 0.2s ease-in, box-shadow 0.3s ease-in;
+}
+
+button:hover .gradientOverlay {
+  opacity: 0.4;
+  box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.25); /* Adjust the color and opacity as needed */
+}
