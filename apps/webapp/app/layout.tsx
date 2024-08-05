@@ -2,7 +2,7 @@
 import React, { ReactNode, useEffect, useState, createContext, useContext } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { FaBookDead, FaBookOpen, FaCube, FaHome, FaPage4, FaPagelines, FaPlusCircle } from 'react-icons/fa';
-import { AiFillProfile, AiOutlineDoubleLeft, AiOutlineProfile } from "react-icons/ai";
+import { AiFillProfile, AiOutlineDoubleLeft, AiOutlineDoubleRight, AiOutlineProfile } from "react-icons/ai";
 import { VscAccount } from "react-icons/vsc";
 import { IoHome, IoHomeOutline, IoCube, IoCubeOutline, IoFileTrayFull, IoFileTrayFullOutline, IoAddCircle } from "react-icons/io5";
 
@@ -10,7 +10,9 @@ import { useTheme, ThemeProvider } from '@/context/ThemeContext';
 import Button from '@/components/Button'
 import ToggleButton from '@/components/ToggleButton';
 import ToggleGroup from '@/components/ToggleGroup';
+import Modal from '@/components/modal/Modal';
 import './global.css';
+import classNames from 'classnames';
 
 type RootLayoutProps = {
   children: ReactNode;
@@ -34,10 +36,12 @@ export default function RootLayout({ children }: RootLayoutProps) {
 }
 
 const SidebarNavigation = ({ children }: RootLayoutProps) => {
-  const { theme, setTheme } = useTheme();
   const pathname = usePathname();
   const router = useRouter()
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  
   const navigationItems = [
     { href: '/', icon: <IoHome size={24} className='mr-4' />, iconOutline: <IoHomeOutline size={24} className='mr-3' />, label: 'Home' },
     { href: '/space', icon: <IoCube size={24} className='mr-4' />, iconOutline: <IoCubeOutline size={24} className='mr-3' />, label: 'Space' },
@@ -45,24 +49,34 @@ const SidebarNavigation = ({ children }: RootLayoutProps) => {
   ]
 
   const selectedIndex = navigationItems.findIndex(item => item.href === pathname);
+  console.log(pathname)
+  console.log(selectedIndex)
 
-  const toggleTheme = () => {
-    setTheme(theme === 'light' ? 'dark' : 'light');
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
+
+  const handleModalOpen = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleModalClose = () => {
+    setIsModalOpen(false);
   };
 
   return (
-    <div>
+    <div className='w-full h-full flex flex-col'>
       <header>
         <h1 >WalletSpace</h1>
-        <Button type='icon'>
+        <Button type='icon' onClick={handleModalOpen}>
           <VscAccount size={28} />
         </Button>
       </header>
-      <div className="sidebar-navigation">
-        <nav>
+      <div className={classNames("sidebar-navigation", {'sidebar-closed': !isSidebarOpen})}>
+        <nav className={classNames({'open': isSidebarOpen})}>
           <div className='flex flex-row justify-between'>
-            <Button type='icon' >
-              <AiOutlineDoubleLeft size={20} />
+            <Button type='icon' onClick={toggleSidebar}>
+              <AiOutlineDoubleLeft size={20}/>
             </Button>
             <Button type='primary' className='flex flex-row justify-center items-center w-9/12'>
               <FaPlusCircle className='mr-4' size={18}/>
@@ -87,13 +101,19 @@ const SidebarNavigation = ({ children }: RootLayoutProps) => {
             ))}
           </ToggleGroup>
           <div>
-            <Button type='primary' onClick={toggleTheme} className='flex'>
-              Switch to {theme === 'light' ? 'Dark' : 'Light'} Mode
-            </Button>
           </div>
         </nav>
-        <main>{children}</main>
+        <div className={classNames('open-nav-buttons', { 'sidebar-closed': !isSidebarOpen })}>
+          <Button className={"open-nav-button mr-4"} type='icon' onClick={toggleSidebar}>
+            <AiOutlineDoubleRight size={20} />
+          </Button>
+          <Button className={"add-button h-8 w-8"} type='primary'>
+            <FaPlusCircle size={30} />
+          </Button>
+        </div>
+        <main className={classNames({ 'sidebar-closed': !isSidebarOpen })}>{children}</main>
       </div>
+      <Modal isOpen={isModalOpen} onClose={handleModalClose} />
     </div>
   );
 };

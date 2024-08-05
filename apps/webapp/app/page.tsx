@@ -4,7 +4,7 @@ import { FaHome } from 'react-icons/fa';
 
 export default function Index() {
   return (
-    <div className="p-4 space-y-6">
+    <div className="w-6/12">
       <div className='p-5'>
         <Button className='m-1' type='primary' >primary</Button>
         <Button className='m-1' type='submit' >submit</Button>

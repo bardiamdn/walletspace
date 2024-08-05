@@ -13,7 +13,7 @@ type ButtonProps = {
 }
 
 const buttonStyles = {
-  'primary': 'relative bg-primary text-text-reverse rounded-2xl py-1 px-4 overflow-hidden hover:ring-4 hover:ring-accent hover:ring-opacity-50',
+  'primary': 'relative bg-primary text-text-reverse rounded-2xl overflow-hidden hover:ring-4 hover:ring-accent hover:ring-opacity-50',
   'submit': 'bg-button-primary text-text-reverse rounded-lg py-2 px-4',
   'secondary': 'bg-button-secondary rounded-lg py-2 px-4',
   'outline': 'border border-border rounded-lg py-2 px-4 hover:bg-button-hover',
@@ -23,28 +23,28 @@ const buttonStyles = {
 }
 
 const Button: React.FC<ButtonProps> = ({ children, type= 'submit', href, onClick, className}) => {
-  return (
-    <>
-    {
-      type === 'link' && href ?
+
+  if(type === 'link' && href) {
+    return (
       <Link href={href} className={classNames(buttonStyles[type], className, 'flex flex-row items-center font-medium')} >
         {children}
       </Link>
-      :
-      <button
-      className={classNames(buttonStyles[type], className, 'flex flex-row items-center font-medium')}
-      onClick={onClick}
-      >
-        {type === 'primary' && (
-          <>
-            <span className={styles.gradientOverlay}></span>
-            <span className={classNames("relative flex flex-row items-center font-medium z-1")}>{children}</span>
-          </>
-        )}
-        {type !== 'primary' && children}
-      </button>
-    }
-    </>
+    )
+  }
+
+  return (
+    <button
+    className={classNames(buttonStyles[type], className, 'flex flex-row items-center font-medium')}
+    onClick={onClick}
+    >
+      {type === 'primary' && (
+        <>
+          <span className={styles.gradientOverlay}></span>
+          <span className={classNames("relative flex flex-row items-center font-medium z-1")}>{children}</span>
+        </>
+      )}
+      {type !== 'primary' && children}
+    </button>
   );
 }
 
