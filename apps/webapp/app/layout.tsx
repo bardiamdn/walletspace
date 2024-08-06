@@ -10,7 +10,8 @@ import { useTheme, ThemeProvider } from '@/context/ThemeContext';
 import Button from '@/components/Button'
 import ToggleButton from '@/components/ToggleButton';
 import ToggleGroup from '@/components/ToggleGroup';
-import Modal from '@/components/modal/Modal';
+import Menu from '@/components/modal/MenuModal';
+import Modal from '@/components/Modal';
 import './global.css';
 import classNames from 'classnames';
 
@@ -49,8 +50,6 @@ const SidebarNavigation = ({ children }: RootLayoutProps) => {
   ]
 
   const selectedIndex = navigationItems.findIndex(item => item.href === pathname);
-  console.log(pathname)
-  console.log(selectedIndex)
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -85,7 +84,7 @@ const SidebarNavigation = ({ children }: RootLayoutProps) => {
           </div>
           <hr />
 
-          <ToggleGroup className="flex flex-col mb-6">
+          <ToggleGroup className="flex flex-col mb-6" initialIndex={selectedIndex}>
             {navigationItems.map((item, index) => (
               <ToggleButton
                 key={item.href}
@@ -113,7 +112,7 @@ const SidebarNavigation = ({ children }: RootLayoutProps) => {
         </div>
         <main className={classNames({ 'sidebar-closed': !isSidebarOpen })}>{children}</main>
       </div>
-      <Modal isOpen={isModalOpen} onClose={handleModalClose} />
+      <Menu isOpen={isModalOpen} onClose={handleModalClose} />
     </div>
   );
 };

@@ -1,14 +1,21 @@
-import React, { useState, ReactNode, ReactElement } from 'react';
+import React, { useState, useEffect, ReactNode, ReactElement } from 'react';
 import ToggleButton from './ToggleButton';
 
 type ToggleGroupProps = {
   children: ReactNode;
+  initialIndex?: number;
   className?: string;
   onChange?: (selectedIndex: number) => void;
 }
 
-const ToggleGroup: React.FC<ToggleGroupProps> = ({ children, className, onChange }) => {
-  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+const ToggleGroup: React.FC<ToggleGroupProps> = ({ children, initialIndex, className, onChange }) => {
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(initialIndex? initialIndex : null);
+
+  useEffect(() => {
+    if (typeof initialIndex === 'number') {
+      setSelectedIndex(initialIndex);
+    }
+  }, [initialIndex]);
 
   const handleToggle = (index: number) => {
     setSelectedIndex(index);

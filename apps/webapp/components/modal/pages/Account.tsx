@@ -3,7 +3,7 @@ import React from 'react';
 import { useTheme } from '@/context/ThemeContext';
 import Button from '@/components/Button';
 
-const Preferences = () => {
+const Account = () => {
   const { theme, setTheme } = useTheme();
   const toggleTheme = () => {
     setTheme(theme === 'light' ? 'dark' : 'light');
@@ -21,4 +21,4 @@ const Preferences = () => {
   )
 }
 
-export default Preferences
+export default Account
