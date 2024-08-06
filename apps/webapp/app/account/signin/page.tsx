@@ -11,6 +11,7 @@ interface SignInFormValues {
 }
 
 
+const api_url = process.env.NEXT_PUBLIC_API_URL_DEV;
 const SignInPage: NextPage = () => {
   const [formValues, setFormValues] = useState<SignInFormValues>({ email: '', password: '' });
   const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
@@ -40,7 +41,7 @@ const SignInPage: NextPage = () => {
 
     setLoading(true);
     try {
-      const res = await fetch(`http://localhost:3000/auth/signin`, {
+      const res = await fetch(api_url+'/auth/signin', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -48,11 +49,12 @@ const SignInPage: NextPage = () => {
         credentials: 'include',
         body: JSON.stringify(formValues),
       });
+      const data = await res.json();
 
       if (res.ok) {
+        localStorage.setItem('authToken', data.authInfo.token)
         router.replace('/');
       } else {
-        const data = await res.json();
         alert(data.message || 'Sign-in failed');
       }
     } catch (error) {

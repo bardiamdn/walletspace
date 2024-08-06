@@ -173,6 +173,12 @@ router.post('/signin', async (req: Request, res: Response) => {
 // Reset password
 // Delete account
 
+// Cookie Sign out
+router.post('/signout-cookie', authMiddleware, (req: Request, res: Response) => {
+  res.clearCookie('authToken');
+  return res.status(200).cookie('authToken', {maxAge: 0}).json({ success: true, message: 'Signed out successfully' });
+})
+
 // Authenticated check
 router.get('/validate', authMiddleware, (req: Request, res: Response) => {
   return res.status(200).json({ success: true, message: 'You are authenticated', authInfo: req.jwt })
