@@ -18,6 +18,7 @@ module.exports = {
         accent: 'var(--color-accent)',
         background: 'var(--color-background)', 
         'background-secondary': 'var(--color-background-secondary)', 
+        'background-warning': 'var(--color-background-warning)',
         'text-primary': 'var(--color-text-primary)',
         'text-secondary': 'var(--color-text-secondary)',
         'text-disabled': 'var(--color-text-disabled)',

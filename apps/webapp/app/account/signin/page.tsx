@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import type { NextPage } from 'next';
 import { useRouter } from 'next/navigation';
-import styles from '../../authRoutes.module.css';
+import styles from '../authRoutes.module.css';
 
 interface SignInFormValues {
   email: string;

@@ -9,6 +9,7 @@
 
   --color-background: #ffffff;
   --color-background-secondary: #E3DEDA;
+  --color-background-warning: #ec34346e;
   
   --color-text-primary: #171717;
   --color-text-secondary: #605F5F;
@@ -23,7 +24,7 @@
   --color-button-selected: #918E8C2f;
   --color-button-disabled: #9D988Fc5;
   
-  --color-warning: #ec3434d3;
+  --color-warning: #ec3434bd;
 }
 
 [data-theme='dark'] {
@@ -162,7 +163,19 @@ hr {
 .sidebar-navigation .open-nav-buttons.sidebar-closed {
   margin-left: 1rem;
 }
-@media (max-width: 55em) {
+.sidebar-navigation main .content {
+  /* max-width: 80%;
+  min-width: 50%; */
+  width: 60%;
+  height: 100%;
+}
+@media (max-width: 1300px) {
+  .sidebar-navigation main .content {
+    width: 95%;
+    /* min-width: 90%; */
+  }
+}
+@media (max-width: 768px) {
   .sidebar-navigation nav {
     width: 0%;
     margin-left: -10rem;

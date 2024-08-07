@@ -1,0 +1,13 @@
+.scrollContainer {
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+.scrollContainer::-webkit-scrollbar {
+  height: 4px;
+}
+
+.scrollContainer::-webkit-scrollbar-thumb {
+  background-color: var(--color-border);
+  border-radius: 4px;
+}

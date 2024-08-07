@@ -110,7 +110,11 @@ const SidebarNavigation = ({ children }: RootLayoutProps) => {
             <FaPlusCircle size={30} />
           </Button>
         </div>
-        <main className={classNames({ 'sidebar-closed': !isSidebarOpen })}>{children}</main>
+        <main className={classNames({ 'sidebar-closed': !isSidebarOpen })}>
+          <div className={classNames('content')}>
+            {children}
+          </div>
+        </main>
       </div>
       <Menu isOpen={isModalOpen} onClose={handleModalClose} />
     </div>

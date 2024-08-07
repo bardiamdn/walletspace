@@ -5,6 +5,8 @@ import styles from './Modal.module.css';
 
 type ModalProps = {
   children: ReactNode;
+  // widthPercent: string;
+  // heightPercent: string;
   className?: string;
   isOpen: boolean;
   onClose: () => void;
