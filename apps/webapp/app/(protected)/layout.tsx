@@ -11,7 +11,7 @@ import Button from '@/components/Button'
 import ToggleButton from '@/components/ToggleButton';
 import ToggleGroup from '@/components/ToggleGroup';
 import Menu from '@/components/modal/MenuModal';
-import Modal from '@/components/Modal';
+import AddTransaction from '@/components/AddTransaction';
 import './global.css';
 import classNames from 'classnames';
 
@@ -40,13 +40,14 @@ const SidebarNavigation = ({ children }: RootLayoutProps) => {
   const pathname = usePathname();
   const router = useRouter()
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isAddOpen, setIsAddOpen] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   
   const navigationItems = [
     { href: '/', icon: <IoHome size={24} className='mr-4' />, iconOutline: <IoHomeOutline size={24} className='mr-3' />, label: 'Home' },
     { href: '/space', icon: <IoCube size={24} className='mr-4' />, iconOutline: <IoCubeOutline size={24} className='mr-3' />, label: 'Space' },
-    { href: '/records', icon: <IoFileTrayFull size={24} className='mr-4' />, iconOutline: <IoFileTrayFullOutline size={24} className='mr-3' />, label: 'Receipts' },
+    { href: '/history', icon: <IoFileTrayFull size={24} className='mr-4' />, iconOutline: <IoFileTrayFullOutline size={24} className='mr-3' />, label: 'History' },
   ]
 
   const selectedIndex = navigationItems.findIndex(item => item.href === pathname);
@@ -55,19 +56,27 @@ const SidebarNavigation = ({ children }: RootLayoutProps) => {
     setIsSidebarOpen(!isSidebarOpen);
   };
 
-  const handleModalOpen = () => {
-    setIsModalOpen(true);
+  const handleAddOpen = () => {
+    setIsAddOpen(true);
   };
 
-  const handleModalClose = () => {
-    setIsModalOpen(false);
+  const handleAddClose = () => {
+    setIsAddOpen(false);
+  };
+
+  const handleMenuOpen = () => {
+    setIsMenuOpen(true);
+  };
+
+  const handleMenuClose = () => {
+    setIsMenuOpen(false);
   };
 
   return (
     <div className='w-full h-full flex flex-col'>
       <header>
         <h1 >WalletSpace</h1>
-        <Button type='icon' onClick={handleModalOpen}>
+        <Button type='icon' onClick={handleMenuOpen}>
           <VscAccount size={28} />
         </Button>
       </header>
@@ -77,9 +86,9 @@ const SidebarNavigation = ({ children }: RootLayoutProps) => {
             <Button type='icon' onClick={toggleSidebar}>
               <AiOutlineDoubleLeft size={20}/>
             </Button>
-            <Button type='primary' className='flex flex-row justify-center items-center w-9/12'>
+            <Button type='primary' className='flex flex-row justify-center items-center w-9/12' onClick={handleAddOpen}>
               <FaPlusCircle className='mr-4' size={18}/>
-              Add Record
+              Add Transaction
             </Button>
           </div>
           <hr />
@@ -107,7 +116,7 @@ const SidebarNavigation = ({ children }: RootLayoutProps) => {
             <AiOutlineDoubleRight size={20} />
           </Button>
           <Button className={"add-button h-8 w-8"} type='primary'>
-            <FaPlusCircle size={30} />
+            <FaPlusCircle size={30} onClick={handleAddOpen} />
           </Button>
         </div>
         <main className={classNames({ 'sidebar-closed': !isSidebarOpen })}>
@@ -116,7 +125,8 @@ const SidebarNavigation = ({ children }: RootLayoutProps) => {
           </div>
         </main>
       </div>
-      <Menu isOpen={isModalOpen} onClose={handleModalClose} />
+      <Menu isOpen={isMenuOpen} onClose={handleMenuClose} />
+      <AddTransaction isOpen={isAddOpen} onClose={handleAddClose} />
     </div>
   );
 };

@@ -87,7 +87,7 @@ h2 {
   @apply text-3xl font-semibold text-text-secondary;
 }
 h3 {
-  @apply text-2xl font-medium text-text-primary;
+  @apply text-lg font-semibold text-text-primary;
 }
 p {
   @apply text-base text-text-primary;

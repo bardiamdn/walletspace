@@ -46,11 +46,11 @@ const Account = () => {
     </div>
     {openDialog && 
       <Dialog isOpen={openDialog} onClose={() => setOpenDialog(false)}>
-        <DialogHeader>Sign Out</DialogHeader>
+        <DialogHeader>Sign out</DialogHeader>
         <DialogContent>You would have to sign in again if you sign out</DialogContent>
         <DialogFooter>
-          <Button type='outline' className='mr-4' onClick={() => setOpenDialog(false)}>
-            close
+          <Button type='outline' className='mr-2' onClick={() => setOpenDialog(false)}>
+            Cancel
           </Button>
           <Button type='destructive' onClick={handleSignOut}>
             Sign out
