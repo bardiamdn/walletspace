@@ -10,8 +10,8 @@ import { useTheme, ThemeProvider } from '@/context/ThemeContext';
 import Button from '@/components/Button'
 import ToggleButton from '@/components/ToggleButton';
 import ToggleGroup from '@/components/ToggleGroup';
-import Menu from '@/components/modal/MenuModal';
-import AddTransaction from '@/components/AddTransaction';
+import Menu from '@/components/Menu/MenuModal';
+import AddTransaction from '@/components/AddTransaction/AddModal';
 import './global.css';
 import classNames from 'classnames';
 
