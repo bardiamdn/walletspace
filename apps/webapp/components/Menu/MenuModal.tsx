@@ -15,11 +15,11 @@ import {
 import styles from './MenuModal.module.css'; 
 import ToggleGroup from '../ToggleGroup';
 import ToggleButton from '../ToggleButton';
-import Account from './pages/Account';
-import BankAccounts from './pages/BankAccounts';
-import Categories from './pages/Categories';
-import Notifications from './pages/Notifications';
-import Settings from './pages/Settings';
+import Account from './MenuSections/Account';
+import BankAccounts from './MenuSections/BankAccounts';
+import Categories from './MenuSections/Categories';
+import Notifications from './MenuSections/Notifications';
+import Settings from './MenuSections/Settings';
 import Modal from '../Modal';
 
 const menuItems = [

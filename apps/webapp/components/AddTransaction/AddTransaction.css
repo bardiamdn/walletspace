@@ -1,0 +1,58 @@
+.section-container {
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.section {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid gray;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.section.active {
+  flex: 5; /* Expands the active section */
+  background-color: var(--color-background-secondary);
+}
+
+.progress-bar-container {
+  width: 100%;
+  height: 8px;
+  background-color: #e0e0e0;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+
+.progress-bar {
+  height: 100%;
+  background-color: var(--color-primary);
+  transition: width 0.5s ease-in;
+}
+
+.progress-container {
+  padding: 10px;
+}
+
+.previous-button,
+.next-button {
+  padding: 10px;
+  background-color: var(--color-primary);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out;
+}
+
+.previous-button:disabled,
+.next-button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+.previous-button:hover:not(:disabled),
+.next-button:hover:not(:disabled) {
+  background-color: #0056b3;
+}

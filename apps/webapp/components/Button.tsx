@@ -9,6 +9,7 @@ type ButtonProps = {
   type?: 'primary' | 'submit' | 'secondary' | 'destructive' | 'outline' | 'link' | 'icon';
   href?: Url,
   onClick?: () => void;
+  disabled?: boolean;
   className?: string;
 }
 
