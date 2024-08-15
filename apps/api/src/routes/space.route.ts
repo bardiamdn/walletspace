@@ -18,19 +18,19 @@ const router = Router();
 router.post('/space', authMiddleware, async (req: Request, res: Response) => {
   const user_id = parseInt(req.jwt.sub);
   const { space_name } = req.body;
-  
-  if (!user_id || !space_name ) {
+
+  if (!user_id || !space_name) {
     return res.status(400).json({ success: false, message: 'Invalid user ID or missing space name' });
   }
 
   try {
     const space = await AppDataSource.manager.findOneBy(Space, {
-        users: { user_id: user_id },
-        space_name: space_name
+      users: { user_id: user_id },
+      space_name: space_name
     }) as Space;
-    
-    if(space) {
-      return res.status(409).json({ success: false, message: "Space name already exists, try another name"});
+
+    if (space) {
+      return res.status(409).json({ success: false, message: "Space name already exists, try another name" });
     }
     const newSpace = AppDataSource.manager.create(Space, {
       users: [{ user_id: user_id }],
@@ -41,15 +41,15 @@ router.post('/space', authMiddleware, async (req: Request, res: Response) => {
     });
 
     await AppDataSource.manager.save(newSpace);
-    return res.status(201).json({ 
-      success: true, 
-      message: 'Space created successfully', 
+    return res.status(201).json({
+      success: true,
+      message: 'Space created successfully',
       space: newSpace,
       authInfo: req.jwt
-      });
+    });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ success: false, message: 'Server error'})
+    return res.status(500).json({ success: false, message: 'Server error' })
   }
 });
 
@@ -57,39 +57,39 @@ router.post('/space', authMiddleware, async (req: Request, res: Response) => {
 router.get('/spaces', authMiddleware, async (req: Request, res: Response) => {
   const user_id = parseInt(req.jwt.sub);
 
-    
+
   if (!user_id) {
     return res.status(400).json({ succcess: false, message: "Missing data" });
   };
-  
+
   try {
     const spaces = await AppDataSource.manager.find(Space, {
       where: {
-         users: {
-           user_id: user_id 
-         }
+        users: {
+          user_id: user_id
+        }
       }
     }) as Space[];
-    
-    return res.status(200).json({ 
-      success: true, 
-      message: "Data retrieved successfully", 
+
+    return res.status(200).json({
+      success: true,
+      message: "Data retrieved successfully",
       spaces: spaces,
       authInfo: req.jwt
     });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ success: false, message: 'Server error'})
+    return res.status(500).json({ success: false, message: 'Server error' })
   }
 });
 
 // GET space info
 router.get('/space/:space_id/info', authMiddleware, spaceAccessMW, async (req: Request, res: Response) => {
-  
+
   try {
     const transformedUsers = req.spaceInfo.users.map((user: User) => ({ user_id: user.user_id }));
 
-    return res.status(200).json({ 
+    return res.status(200).json({
       success: true,
       message: "Data retrieved successfully",
       space: {
@@ -100,23 +100,23 @@ router.get('/space/:space_id/info', authMiddleware, spaceAccessMW, async (req: R
     });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ success: false, message: 'Server error'})
+    return res.status(500).json({ success: false, message: 'Server error' })
   }
 });
 
 // PATCH space - update a space
-router.patch('/space/:space_id', authMiddleware, spaceAdminMW,  async (req: Request, res: Response) => {
+router.patch('/space/:space_id', authMiddleware, spaceAdminMW, async (req: Request, res: Response) => {
   const user_id = parseInt(req.jwt.sub);
   const space_id = parseInt(req.params.space_id);
   const { space_name } = req.body;
-  
+
   if (!user_id || !space_id || !space_name) {
     return res.status(400).json({ succcess: false, message: "Missing data" });
   };
-  
+
   try {
     const space = await AppDataSource.manager.findOneBy(Space, {
-      admin: { user_id: user_id},
+      admin: { user_id: user_id },
       space_id: space_id
     });
 
@@ -138,21 +138,21 @@ router.patch('/space/:space_id', authMiddleware, spaceAdminMW,  async (req: Requ
 
     const updatedSpace = await AppDataSource.manager.save(space);
 
-    return res.status(200).json({ 
-      success: true, 
-      message: 'Space updated successfully', 
+    return res.status(200).json({
+      success: true,
+      message: 'Space updated successfully',
       space: updatedSpace,
       authInfo: req.jwt
     })
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ success: false, message: 'Server error'})
+    return res.status(500).json({ success: false, message: 'Server error' })
   }
 });
 
 
 // POST a new invitation - add a new invitation
-router.post('/space/:space_id/invite', authMiddleware, spaceAdminMW, async (req:Request, res: Response) => {
+router.post('/space/:space_id/invite', authMiddleware, spaceAdminMW, async (req: Request, res: Response) => {
   const inviter_id = parseInt(req.jwt.sub);
   const space_id = parseInt(req.params.space_id);
   const { invitee_id } = req.body;
@@ -163,20 +163,20 @@ router.post('/space/:space_id/invite', authMiddleware, spaceAdminMW, async (req:
 
   try {
     // Space and user existance are validated in the spaceAdmin middleware
-    const invitee = await AppDataSource.manager.findOneBy(User, {user_id: invitee_id});
+    const invitee = await AppDataSource.manager.findOneBy(User, { user_id: invitee_id });
 
     if (!invitee) {
       return res.status(404).json({ success: false, message: "User not found" });
     }
 
     const existingInvitation = await AppDataSource.manager.findOne(Invitation, {
-      relations:{
+      relations: {
         space: true,
         inviter: true,
         invitee: true
       },
       where: {
-        space:{
+        space: {
           space_id: space_id,
         },
         inviter: {
@@ -188,34 +188,34 @@ router.post('/space/:space_id/invite', authMiddleware, spaceAdminMW, async (req:
       }
     });
     if (existingInvitation) {
-      return res.status(409).json({ success: false, message: "Invitation already sent"})
+      return res.status(409).json({ success: false, message: "Invitation already sent" })
     }
 
     const newInvitation = AppDataSource.manager.create(Invitation, {
       space: { space_id: space_id },
       inviter: { user_id: inviter_id },
-      invitee: { user_id: invitee_id},
+      invitee: { user_id: invitee_id },
       status: 'pending'
     });
 
     await AppDataSource.manager.save(newInvitation);
 
-    return res.status(200).json({ 
-      success: true, 
+    return res.status(200).json({
+      success: true,
       message: "Invitaion created successfully",
       authInfo: req.jwt
     })
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ success: false, message: 'Server error'})
+    return res.status(500).json({ success: false, message: 'Server error' })
   };
 });
 
 
 // Get latest space data
-router.get('/space/:space_id', authMiddleware, async (req: Request, res: Response) => {
+router.get('/space/:space_id', authMiddleware, spaceAccessMW, async (req: Request, res: Response) => {
   const space_id = parseInt(req.params.space_id);
-  const limit = parseInt(req.query.limit as string) || 25; 
+  const limit = parseInt(req.query.limit as string) || 25;
   const offset = parseInt(req.query.offset as string) || 0;
 
 
@@ -253,9 +253,9 @@ router.get('/space/:space_id', authMiddleware, async (req: Request, res: Respons
       skip: offset
     });
 
-    return res.status(200).json({ 
-      success: true, 
-      message: "Space data retrieved", 
+    return res.status(200).json({
+      success: true,
+      message: "Space data retrieved",
       space: {
         ...space,
         users: userIds,
@@ -266,11 +266,11 @@ router.get('/space/:space_id', authMiddleware, async (req: Request, res: Respons
       },
       limit, // Number of items returned
       offset, // Offset used for this query
-      authInfo: req.jwt 
+      authInfo: req.jwt
     });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ success: false, message: 'Server error'})
+    return res.status(500).json({ success: false, message: 'Server error' })
   }
 })
 
@@ -290,18 +290,18 @@ router.get('/space/:space_id/comments', authMiddleware, spaceAccessMW, async (re
     });
 
     if (comments.length === 0) {
-      return res.status(404).json({ success: true, message: "There is no comment" });
+      return res.status(404).json({ success: true, message: "There is no comment", comments: [], authInfo: req.jwt });
     }
-        
-    return res.status(200).json({ 
-      success: true, 
-      message: "Comments retrieved", 
-      comments, 
-      authInfo: req.jwt 
+
+    return res.status(200).json({
+      success: true,
+      message: "Comments retrieved",
+      comments,
+      authInfo: req.jwt
     });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ success: false, message: 'Server error'})
+    return res.status(500).json({ success: false, message: 'Server error' })
   }
 });
 
@@ -321,18 +321,18 @@ router.get('/space/:space_id/transactions', authMiddleware, spaceAccessMW, async
     });
 
     if (transactions.length === 0) {
-      return res.status(404).json({ success: true, message: "There is no transaction" });
+      return res.status(404).json({ success: true, message: "There is no transaction", transactions: [], authInfo: req.jwt });
     }
-        
-    return res.status(200).json({ 
-      success: true, 
-      message: "Transactions retrieved", 
-      transactions, 
-      authInfo: req.jwt 
+
+    return res.status(200).json({
+      success: true,
+      message: "Transactions retrieved",
+      transactions,
+      authInfo: req.jwt
     });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ success: false, message: 'Server error'})
+    return res.status(500).json({ success: false, message: 'Server error' })
   }
 });
 
@@ -340,15 +340,15 @@ router.get('/space/:space_id/transactions', authMiddleware, spaceAccessMW, async
 // DELETE a space
 router.delete('/space/:space_id', authMiddleware, spaceAdminMW, async (req: Request, res: Response) => {
   const space_id = parseInt(req.params.space_id);
-  
+
   try {
     // Ownership is checked in the spaceAdmin middleware
     await AppDataSource.manager.delete(Space, space_id);
     console.log(req.spaceInfo)
 
-    return res.status(200).json({ 
-      success: true, 
-      message: 'Space deleted successfully', 
+    return res.status(200).json({
+      success: true,
+      message: 'Space deleted successfully',
       deletedSpace: req.spaceInfo,
       // {
       //   space_id: req.spaceInfo.space_id,
@@ -360,7 +360,7 @@ router.delete('/space/:space_id', authMiddleware, spaceAdminMW, async (req: Requ
     });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ success: false, message: 'Server error'})
+    return res.status(500).json({ success: false, message: 'Server error' })
   }
 });
 
