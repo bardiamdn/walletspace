@@ -1,0 +1,9 @@
+.headerContainer {
+    position: fixed;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    margin-top: 0;
+    background: linear-gradient(to bottom, white, transparent);
+    z-index: 100;
+}
