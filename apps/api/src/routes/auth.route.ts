@@ -13,7 +13,7 @@ import * as utils from '../lib/utils';
 import authMiddleware from '../middlewares/authMiddleware';
 
 dotenv.config();
-const publicKeyPath = path.join('./libs/keys/', 'id_rsa_pub.pem');
+const publicKeyPath = path.join('./secrets/development/keys/', 'id_rsa_pub.pem');
 const PUB_KEY = fs.readFileSync(publicKeyPath, 'utf8');
 
 
@@ -22,17 +22,17 @@ const router = Router();
 // Manual signup
 router.post('/register', async (req: Request, res: Response) => {
   const { email, password } = req.body;
-  
-  if(!utils.isValidEmail(email)) {
-    return res.status(400).json({ succcess: false, message: "Please provide your email and password"});
+
+  if (!utils.isValidEmail(email)) {
+    return res.status(400).json({ succcess: false, message: "Please provide your email and password" });
   }
 
   try {
     const userRepo = AppDataSource.getRepository(User);
     const profileRepo = AppDataSource.getRepository(Profile);
 
-    const existingUser = await userRepo.findOne({ where: {email: email} })
-    
+    const existingUser = await userRepo.findOne({ where: { email: email } })
+
     if (existingUser) {
       return res.status(400).json({ succcess: false, message: 'User already exists' });
     }
@@ -55,11 +55,11 @@ router.post('/register', async (req: Request, res: Response) => {
     await profileRepo.save(newProfile);
 
     // Issue JWT token and send confirmation email
-    let { token } = utils.issueJWT(newUser);
+    const { token } = utils.issueJWT(newUser);
     utils.sendConfirmationEmail(email, token.split(' ')[1])
-    
+
     console.log(`Sent confirmation email to ${email}`);
-    
+
     return res.status(201).json({ success: true, message: 'Please confirm your email' });
   } catch (err) {
     console.error(err);
@@ -69,12 +69,12 @@ router.post('/register', async (req: Request, res: Response) => {
 
 // Resend verification email
 router.get('/resend-email', async (req: Request, res: Response) => {
-  const { email } = req.query as { email: string};
+  const { email } = req.query as { email: string };
   try {
     const user = await AppDataSource.getRepository(User).findOneBy({ email, email_confirmed: false });
 
     if (!user) {
-      return res.status(404).send("<h3>Email doesn't exist or is already confirmed</h3>" );
+      return res.status(404).send("<h3>Email doesn't exist or is already confirmed</h3>");
     }
     const { token } = utils.issueJWT(user);
     await utils.sendConfirmationEmail(email, token.split(' ')[1]);
@@ -94,11 +94,11 @@ router.get('/confirm-email', async (req: Request, res: Response) => {
   try {
     // Verify the token
     const userVerification = jsonwebtoken.verify(token, PUB_KEY, { algorithms: ['RS256'] }) as JwtPayload;
-    
+
     if (userVerification.iat === undefined) {
       return res.status(400).send('<h3>Token missing iat field');
     }
-    
+
     // Check the timeout
     const issuedAt = Math.floor(userVerification.iat);
     const currentTime = Math.floor(Date.now() / 1000);
@@ -110,8 +110,8 @@ router.get('/confirm-email', async (req: Request, res: Response) => {
     }
 
     // Check user email extracted from token
-    const user = await AppDataSource.getRepository(User).findOne({ where: {email: userVerification.email, email_confirmed: false } });
-    
+    const user = await AppDataSource.getRepository(User).findOne({ where: { email: userVerification.email, email_confirmed: false } });
+
     if (!user) {
       return res.status(404).send('<h3>User not found or email already confirmed</h3>');
     }
@@ -140,7 +140,7 @@ router.post('/signin', async (req: Request, res: Response) => {
     if (!user) {
       return res.status(404).json({ success: false, message: 'User not found' });
     }
-    if(!user.email_confirmed) {
+    if (!user.email_confirmed) {
       return res.status(401).json({ success: false, message: 'Please confirm your email' });
     }
 
@@ -149,18 +149,18 @@ router.post('/signin', async (req: Request, res: Response) => {
     if (validation) {
       const authInfo = utils.issueJWT(user);
       return res
-      .status(200)
-      .cookie('authToken', authInfo.token.split(' ')[1],{
-        httpOnly: true,
-        // secure: process.env.NODE_ENV === 'production',
-        // sameSite: 'strict',
-        secure: process.env.NODE_ENV === 'production', // Enable secure in production
-        sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax', // Adjust for development
-        path: '/', 
-         // expires either in days or hours and defaults to 1 day
-        maxAge: authInfo.expires.includes('d') ?  parseInt(authInfo.expires) * 24 * 60 * 60 * 1000 : authInfo.expires.includes('h') ? parseInt(authInfo.expires) * 60 * 1000 : 24 * 60 * 60 * 1000
-      })
-      .json({ success: true, message: 'Successfully signed in',authInfo: authInfo });
+        .status(200)
+        .cookie('authToken', authInfo.token.split(' ')[1], {
+          httpOnly: true,
+          // secure: process.env.NODE_ENV === 'production',
+          // sameSite: 'strict',
+          secure: process.env.NODE_ENV === 'production', // Enable secure in production
+          sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax', // Adjust for development
+          path: '/',
+          // expires either in days or hours and defaults to 1 day
+          maxAge: authInfo.expires.includes('d') ? parseInt(authInfo.expires) * 24 * 60 * 60 * 1000 : authInfo.expires.includes('h') ? parseInt(authInfo.expires) * 60 * 1000 : 24 * 60 * 60 * 1000
+        })
+        .json({ success: true, message: 'Successfully signed in', authInfo: authInfo });
     } else {
       return res.status(401).json({ success: false, message: 'Authentication failed' });
     }
@@ -176,7 +176,7 @@ router.post('/signin', async (req: Request, res: Response) => {
 // Cookie Sign out
 router.post('/signout-cookie', authMiddleware, (req: Request, res: Response) => {
   res.clearCookie('authToken');
-  return res.status(200).cookie('authToken', {maxAge: 0}).json({ success: true, message: 'Signed out successfully' });
+  return res.status(200).cookie('authToken', { maxAge: 0 }).json({ success: true, message: 'Signed out successfully' });
 })
 
 // Authenticated check
