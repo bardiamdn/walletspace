@@ -8,7 +8,7 @@ A platform for managing and sharing your common expenses.
 Manage, track, and share your finances effortlessly with WalletSpace. Whether you want to split a bill or monitor your financial health together with your housemates, we've got you covered. Stay on top of your finances with intuitive tools that keep everyone on the same page.
 
 </div>
-  <div style="flex: 1.5;" align="right">
+  <div style="flex: 1;" align="right">
   <img src="libs/assets/images/logo-lockup-bright.svg#gh-light-mode-only" height="100px" alt="WalletSpace logo (bright mode)">
   <img src="libs/assets/images/logo-lockup-dark.svg" height="100px" alt="WalletSpace logo (dark mode)">
 </div>
@@ -16,11 +16,11 @@ Manage, track, and share your finances effortlessly with WalletSpace. Whether yo
 
 ## Features
 
-- Create spaces and add friends to track spending together.
-- Scan receipts in any language.
-- Extract items from receipts.
-- Categorize items.
-- Assign items to spaces or friends.
+- [ ] Create spaces and add friends to track spending together.
+- [ ] Scan receipts in any language.
+- [ ] Extract items from receipts.
+- [ ] Categorize items.
+- [ ] Assign items to spaces or friends.
 
 ## Getting Started
 
