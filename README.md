@@ -10,7 +10,7 @@ Manage, track, and share your finances effortlessly with WalletSpace. Whether yo
 </div>
   <div style="flex: 1;" align="right">
   <img src="libs/assets/images/logo-lockup-bright.svg#gh-light-mode-only" height="100px" alt="WalletSpace logo (bright mode)">
-  <img src="libs/assets/images/logo-lockup-dark.svg" height="100px" alt="WalletSpace logo (dark mode)">
+  <img src="libs/assets/images/logo-lockup-dark.svg#gh-dark-mode-only" height="100px" alt="WalletSpace logo (dark mode)">
 </div>
 </div>
 
