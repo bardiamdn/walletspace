@@ -1,64 +1,86 @@
+@import url('https://fonts.googleapis.com/css2?family=Albert+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+
 .heroContainer{
+    display: flex;
+    position: relative;
     width: 100%;
     height: 100vh;
-    display: flex;
-    justify-content: space-between;
-    /* align-items: center; */
-    /* background-color: rgb(73, 73, 73); */
+    z-index: 2;
+    overflow: hidden;
+    /* box-sizing: border-box; */
 }
 .ctaContainer {
-    /* background-color: #cccccc; */
     display: flex;
     flex-direction: column;
     align-items: center;
     margin-top: calc(0.2 * 100vh);
+    flex: 1;
+    /* box-sizing: border-box; */
 }
 .header {
-    /* font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; */
-    font-family: Arial, Helvetica, sans-serif;
     font-weight: 700;
     line-height: 64px;
     font-size: 60px;
 }
 .subHeader {
-    font-family: Arial, Helvetica, sans-serif;
-    font-style: inherit;
-    font-size: 35px;
-    font-weight: 400;
+    font-size: 30px;
+    font-weight: 600;
     line-height: 32px;
     color: #414141;
 }
 .form {
     display: flex;
     flex-direction: column;
-    /* background-color: #969696; */
-    /* justify-content: center; */
     align-items: flex-start;
     padding-top: 72px;
 }
 .input {
     width: 300px;
     height: 50px;
-    border-radius: 10px; /* Reduced for a smoother look */
-    border: 2px solid #707070; /* Slightly thicker and lighter color */
-    padding: 10px; /* Adds space inside the input */
-    font-size: 16px; /* Adjusts font size for better readability */
-    outline: none; /* Removes default outline on focus */
+    border-radius: 10px;
+    border: 2px solid #bdbdbd;
+    padding: 10px;
+    font-size: 16px;
+    outline: none;
     margin-right: 20px;
 }
 .input:focus {
-    border-color: #5A5A5A; /* Slightly darker color on focus */
-    box-shadow: 0 0 5px rgba(90, 90, 90, 0.5); /* Adds a subtle shadow on focus */
+    border-color: #5A5A5A;
+    box-shadow: 0 0 5px rgba(90, 90, 90, 0.5);
 }
 .button {
     width: 100px;
     height: 50px;
     background-color: #919191;
-    border-radius: 10px; /* Reduced for a smoother look */
-    border: 2px solid #707070; /* Slightly thicker and lighter color */
+    border-radius: 10px;
+    border: 2px solid #707070;
 }
 .button:hover {
     background-color: #707070;
-    border: 2px solid #424242; /* Slightly thicker and lighter color */
-    box-shadow: 0 0 5px rgba(90, 90, 90, 0.5); /* Adds a subtle shadow on focus */
+    border: 2px solid #424242;
+    box-shadow: 0 0 5px rgba(90, 90, 90, 0.5);
+}
+
+.leftVisual {
+    margin-top: 300px;
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+
+.rightVisual {
+    margin-top: 300px;
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+
+@media (max-width: 768px) {
+    .ctaContainer {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+    .leftVisual, .rightVisual {
+        display: none;
+    }
 }

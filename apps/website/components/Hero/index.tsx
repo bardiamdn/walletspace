@@ -6,87 +6,90 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useLayoutEffect, useRef } from 'react';
 
 export default function Index() {
-  const pageRef = useRef(null);
-  const titleOneRef = useRef(null);
-  const titleTwoRef = useRef(null);
-  const subTitleOneRef = useRef(null);
-  const subTitleTwoRef = useRef(null);
+  const heroRef = useRef(null);
+  const titleRef = useRef(null);
+  const subTitleRef = useRef(null);
   const formRef = useRef(null);
 
   useLayoutEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
 
-    const timeline = gsap.timeline({
-      scrollTrigger: {
-        trigger: pageRef.current,
-        start: '300px 250px',
-        end: '300px top',
-        scrub: true,
-        markers: true,
+    // section loading animation
+    gsap.fromTo(
+      heroRef.current,
+      {
+        y: 20,
       },
-    });
+      {
+        y: 0,
+        duration: 0.5,
 
-    timeline
-      .to(titleOneRef.current, {
-        y: '-200px',
-      })
-      .to(
-        titleTwoRef.current,
-        {
-          y: '-150px',
-        },
-        '<'
-      )
-      .to(
-        subTitleOneRef.current,
-        {
-          y: '-120px',
-        },
-        '<'
-      )
-      .to(
-        subTitleTwoRef.current,
-        {
-          y: '-100px',
-        },
-        '<'
-      )
-      .to(
-        formRef.current,
-        {
-          y: '-75px',
-        },
-        '<'
-      );
+        ease: 'power2.in',
+      }
+    );
+
+    // gsap
+    //   .timeline({
+    //     scrollTrigger: {
+    //       trigger: heroRef.current,
+    //       start: '300px 250px',
+    //       end: '500px top',
+    //       scrub: true,
+    //       markers: false,
+    //     },
+    //   })
+    //   .to(titleRef.current, {
+    //     y: '-200px',
+    //   })
+    //   .to(
+    //     subTitleRef.current,
+    //     {
+    //       y: '-150px',
+    //     },
+    //     '<'
+    //   )
+    //   .to(
+    //     formRef.current,
+    //     {
+    //       y: '-120px',
+    //     },
+    //     '<'
+    //   );
+
+    // individual loading animation
+    gsap.fromTo(
+      titleRef.current,
+      { x: -5, y: 20, opacity: 0 },
+      { x: 0, y: 0, opacity: 1, duration: 1, ease: 'power2.inOut' }
+    );
+    gsap.fromTo(
+      subTitleRef.current,
+      { x: -2, y: 15, opacity: 0 },
+      { x: 0, y: 0, opacity: 1, duration: 1, ease: 'power2.inOut' }
+    );
+
+    return () => {
+      // Cleanup ScrollTrigger instances
+      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
+    };
   });
 
   return (
-    <div className={styles.heroContainer}>
-      <div className="mt-64">Something here</div>
+    <div className={styles.heroContainer} ref={heroRef}>
+      <div className={classNames(styles.leftVisual)}>Something here</div>
       <section className={styles.ctaContainer}>
-        <h1 ref={titleOneRef} className={styles.header}>
-          Manage your
+        <h1 ref={titleRef} className={classNames(styles.header, 'mb-12')}>
+          Manage Your Shared Finance
         </h1>
-        <br />
-        <h1 ref={titleTwoRef} className={classNames(styles.header, 'mb-12')}>
-          shared expenses
-        </h1>
-        <h4 ref={subTitleOneRef} className={styles.subHeader}>
-          Easiest and fastest way to split
-        </h4>
-        <br />
-        <h4
-          ref={subTitleTwoRef}
-          className={classNames(styles.subHeader, 'mb-12')}
-        >
-          and manage your shared expenses.
+        <h4 ref={subTitleRef} className={classNames(styles.subHeader, 'mb-12')}>
+          Easily track and manage your spendings through a common space
         </h4>
         <form ref={formRef} className={styles.form}>
           <label
             htmlFor="email"
             className="mb-4 text-lg font-semibold text-gray-800"
           >
-            Wanna try the beta version?
+            Want early access?
           </label>
           <div className={styles.ctaAction}>
             <input
@@ -103,7 +106,7 @@ export default function Index() {
           </div>
         </form>
       </section>
-      <div className="mt-64">And something here</div>
+      <div className={classNames(styles.rightVisual)}>And something here</div>
     </div>
   );
 }

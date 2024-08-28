@@ -1,9 +1,35 @@
 .headerContainer {
     position: fixed;
+    /* top: 0;
+    right: 0;
+    transform-origin: top right; */
     display: flex;
     align-items: center;
-    width: 100%;
-    margin-top: 0;
+    justify-content: space-between;
+    width: 100vw;
+    margin: 0;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    padding-right: 1.5rem;
+    padding-left: 1.5rem;
     background: linear-gradient(to bottom, white, transparent);
     z-index: 100;
+}
+
+.link {
+    padding-right: 1.5rem;
+}
+
+@media (max-width: 768px) {
+    .headerContainer {
+        padding-top: 0.25rem;
+        padding-bottom: 0.25rem;
+        padding-right: 0.5rem;
+        padding-left: 0.25rem;
+        background: none;
+        background-color: #fff;
+    }
+    .link {
+        padding-right: 0;
+    }
 }
