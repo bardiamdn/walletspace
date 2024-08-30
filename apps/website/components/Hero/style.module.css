@@ -1,13 +1,22 @@
 @import url('https://fonts.googleapis.com/css2?family=Albert+Sans:ital,wght@0,100..900;1,100..900&display=swap');
 
 .heroContainer{
-    display: flex;
     position: relative;
+    display: flex;
     width: 100%;
     height: 100vh;
-    z-index: 2;
+    z-index: 0;
     overflow: hidden;
+    background-image: 
+        /* radial-gradient(circle, #ffffffab 5%, transparent 140%), */
+        url('/hero-demo-3.svg'); /* Change to the actual path of your image */
+    background-size: cover; 
+    background-position: center; 
+    background-repeat: no-repeat;
+    /* filter: blur(1); */
+    /* filter: brightness(0.6); */
     /* box-sizing: border-box; */
+    /* color: white; */
 }
 .ctaContainer {
     display: flex;
@@ -21,11 +30,13 @@
     font-weight: 700;
     line-height: 64px;
     font-size: 60px;
+    margin-bottom: 3rem;
 }
 .subHeader {
     font-size: 30px;
     font-weight: 600;
     line-height: 32px;
+    margin-bottom: 3rem;
     color: #414141;
 }
 .form {
@@ -76,9 +87,23 @@
 }
 
 @media (max-width: 768px) {
+    .heroContainer {
+        background-image: none;
+    }
     .ctaContainer {
+        margin-top: 4rem;
         padding-left: 20px;
         padding-right: 20px;
+    }
+    .ctaContainer h1 {
+        line-height: 48px;
+        font-size: 45px;
+        margin-bottom: 1.5rem;
+    }
+    .ctaContainer h4 {
+        font-size: 25px;
+        line-height: 32px;
+        margin-bottom: 1.5rem;
     }
     .leftVisual, .rightVisual {
         display: none;

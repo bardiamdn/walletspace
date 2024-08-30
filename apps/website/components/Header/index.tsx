@@ -1,5 +1,5 @@
 'use client';
-import React, { useLayoutEffect, useRef } from 'react';
+import React, { useLayoutEffect, useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 // import LocomotiveScroll from 'locomotive-scroll';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -13,33 +13,40 @@ export default function Index() {
 
   // const scrollRef = useRef(null);
   const containerRef = useRef(null);
+  const directionRef = useRef(1);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
 
-    // hide on scroll down
-    ScrollTrigger.create({
-      trigger: document.body,
-      start: 'top top',
-      end: 'bottom bottom',
-      onUpdate: (self) => {
-        if (self.direction === 1) {
-          // Scrolling down
-          gsap.to(containerRef.current, {
-            y: '-100%',
-            duration: 0.3,
-            ease: 'power2.out',
-          });
-        } else if (self.direction === -1) {
-          // Scrolling up
-          gsap.to(containerRef.current, {
-            y: '0%',
-            duration: 0.3,
-            ease: 'power2.out',
-          });
-        }
+    gsap.to(containerRef.current, {
+      scrollTrigger: {
+        trigger: document.body,
+        start: 0,
+        end: window.innerHeight,
+        onUpdate: (e) => {
+          directionRef.current = e.direction;
+          requestAnimationFrame(animate);
+        },
       },
     });
+
+    const animate = () => {
+      if (directionRef.current === 1) {
+        gsap.to(containerRef.current, {
+          y: '-100%',
+          duration: 0.3,
+          ease: 'power2.out',
+        });
+      } else if (directionRef.current === -1) {
+        // Scrolling up
+        gsap.to(containerRef.current, {
+          y: '0%',
+          duration: 0.3,
+          ease: 'power2.out',
+        });
+      }
+      // requestAnimationFrame(animate);
+    };
 
     const svgContainer = document.getElementById('svgContainer');
 
@@ -98,8 +105,8 @@ export default function Index() {
         svgContainer.removeEventListener('mouseleave', handleMouseLeave);
       }
 
-      // kill scroll trigger
-      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
+      //   // kill scroll trigger
+      //   ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
     };
   }, []);
   return (

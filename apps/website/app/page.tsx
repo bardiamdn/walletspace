@@ -1,6 +1,7 @@
 'use client';
 import { useLayoutEffect, useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 import Header from '../components/Header';
 import Hero from '../components/Hero';
@@ -11,8 +12,13 @@ export default function Index() {
   const scrollRef = useRef(null);
 
   useEffect(() => {
+    (async () => {
+      const LocomotiveScroll = (await import('locomotive-scroll')).default;
+      const locoScroll = new LocomotiveScroll();
+    })();
+
     gsap.fromTo(
-      '.page-container',
+      '.main',
       {
         // y: 20,
         opacity: 0,
@@ -24,14 +30,18 @@ export default function Index() {
         ease: 'power2.in',
       }
     );
-    window.scrollTo(0, 0);
-  });
+  }, []);
+
   return (
-    <div ref={scrollRef} className="flex flex-col items-center page-container">
+    <main
+      ref={scrollRef}
+      className="flex flex-col items-center main"
+      data-scroll-container
+    >
       <Header />
       <Hero />
       <Features />
       <Footer />
-    </div>
+    </main>
   );
 }

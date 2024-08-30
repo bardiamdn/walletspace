@@ -12,8 +12,6 @@ export default function Index() {
   const formRef = useRef(null);
 
   useLayoutEffect(() => {
-    gsap.registerPlugin(ScrollTrigger);
-
     // section loading animation
     gsap.fromTo(
       heroRef.current,
@@ -35,23 +33,23 @@ export default function Index() {
     //       start: '300px 250px',
     //       end: '500px top',
     //       scrub: true,
-    //       markers: false,
+    //       markers: true,
     //     },
     //   })
     //   .to(titleRef.current, {
-    //     y: '-200px',
+    //     y: '100px',
     //   })
     //   .to(
     //     subTitleRef.current,
     //     {
-    //       y: '-150px',
+    //       y: '100px',
     //     },
     //     '<'
     //   )
     //   .to(
     //     formRef.current,
     //     {
-    //       y: '-120px',
+    //       y: '100px',
     //     },
     //     '<'
     //   );
@@ -76,12 +74,12 @@ export default function Index() {
 
   return (
     <div className={styles.heroContainer} ref={heroRef}>
-      <div className={classNames(styles.leftVisual)}>Something here</div>
+      <div className={classNames(styles.leftVisual)}></div>
       <section className={styles.ctaContainer}>
-        <h1 ref={titleRef} className={classNames(styles.header, 'mb-12')}>
+        <h1 ref={titleRef} className={classNames(styles.header)}>
           Manage Your Shared Finance
         </h1>
-        <h4 ref={subTitleRef} className={classNames(styles.subHeader, 'mb-12')}>
+        <h4 ref={subTitleRef} className={classNames(styles.subHeader)}>
           Easily track and manage your spendings through a common space
         </h4>
         <form ref={formRef} className={styles.form}>
@@ -106,7 +104,7 @@ export default function Index() {
           </div>
         </form>
       </section>
-      <div className={classNames(styles.rightVisual)}>And something here</div>
+      <div className={classNames(styles.rightVisual)}></div>
     </div>
   );
 }

@@ -11,35 +11,31 @@ export default function Index() {
   const featuresSectionRef = useRef(null);
   const animationRef = useRef(null);
 
+  const firstFeatureRef = useRef(null);
+  const secondFeatureRef = useRef(null);
+  const thirdFeatureRef = useRef(null);
+  const forthFeatureRef = useRef(null);
+
   useLayoutEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
-    // media scroll
-    // gsap
-    //   .timeline({
-    //     scrollTrigger: featuresSectionRef.current,
-    //     start: 'top top',
-    //     end: 'bottom bottom',
-    //     scrub: true,
-    //     markers: true,
-    //   })
-    //   .to(
-    //     titlesSectionRef.current,
-    //     {
-    //       yPercent: '-100',
-    //       duration: 2,
-    //       ease: 'power1.inOut',
-    //     },
-    //     0
-    //   )
-    //   .to(
-    //     descriptionsSectionRef.current,
-    //     {
-    //       yPercent: '-100',
-    //       duration: 2,
-    //       ease: 'power1.inOut',
-    //     },
-    //     0
-    //   );
+
+    ScrollTrigger.create({
+      trigger: titlesSectionRef.current,
+      snap: {
+        snapTo: 1 / 4, // Snap to the closest section (1/number_of_sections)
+        duration: 0.5, // Duration of the snap animation
+        ease: 'power1.inOut', // Easing function for the snap
+      },
+    });
+
+    // main section scroll
+    const mainTimeline = gsap.timeline({
+      scrollTrigger: featuresSectionRef.current,
+      start: 'top top',
+      end: 'bottom bottom',
+      scrub: true,
+      markers: true,
+    });
 
     // Space feature animation
     gsap
@@ -121,16 +117,16 @@ export default function Index() {
   return (
     <div className={styles.mainContainer} ref={featuresSectionRef}>
       <section className={styles.titlesContainer} ref={titlesSectionRef}>
-        <div className={styles.titleContainer}>
+        <div className={styles.titleContainer} ref={firstFeatureRef}>
           <h3>Create a space and add your friends</h3>
         </div>
-        <div className={styles.titleContainer}>
+        <div className={styles.titleContainer} ref={secondFeatureRef}>
           <h3>Scan your receipts and assign extracted items to your friend</h3>
         </div>
-        <div className={styles.titleContainer}>
+        <div className={styles.titleContainer} ref={thirdFeatureRef}>
           <h3>Manage and analyze your spendings together</h3>
         </div>
-        <div className={styles.titleContainer}>
+        <div className={styles.titleContainer} ref={forthFeatureRef}>
           <h3>That&apos;s it</h3>
         </div>
       </section>

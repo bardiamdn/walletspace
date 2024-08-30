@@ -20,17 +20,17 @@
     height: 100vh;
     display: flex;
     padding-right: 40px;
-    border: 2px solid #3b3b3b;
+    /* border: 2px solid #3b3b3b; */
 }
 .titleContainer h3 {
-    border: 2px solid #616161;
+    /* border: 2px solid #616161; */
 }
 
 .descriptionContainer {
     height: 100vh;
     display: flex;
     padding-left: 40px;
-    border: 2px solid #949494;
+    /* border: 2px solid #949494; */
 }
 
 
@@ -42,7 +42,7 @@
     position: sticky;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, 0);
+    transform: translate(-50%, -50%);
     height: 50vh;
     /* width: 33.33%; */
     flex: 1;
