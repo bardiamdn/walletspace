@@ -12,7 +12,7 @@
     padding-bottom: 1rem;
     padding-right: 1.5rem;
     padding-left: 1.5rem;
-    background: linear-gradient(to bottom, white, transparent);
+    /* background: linear-gradient(to bottom, white, transparent); */
     z-index: 100;
 }
 

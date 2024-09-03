@@ -9,7 +9,7 @@
     overflow: hidden;
     background-image: 
         /* radial-gradient(circle, #ffffffab 5%, transparent 140%), */
-        url('/hero-demo-3.svg'); /* Change to the actual path of your image */
+        url('/hero-demo-4.svg'); /* Change to the actual path of your image */
     background-size: cover; 
     background-position: center; 
     background-repeat: no-repeat;
@@ -29,7 +29,7 @@
 .header {
     font-weight: 700;
     line-height: 64px;
-    font-size: 60px;
+    font-size: 64px;
     margin-bottom: 3rem;
 }
 .subHeader {
@@ -38,38 +38,6 @@
     line-height: 32px;
     margin-bottom: 3rem;
     color: #414141;
-}
-.form {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    padding-top: 72px;
-}
-.input {
-    width: 300px;
-    height: 50px;
-    border-radius: 10px;
-    border: 2px solid #bdbdbd;
-    padding: 10px;
-    font-size: 16px;
-    outline: none;
-    margin-right: 20px;
-}
-.input:focus {
-    border-color: #5A5A5A;
-    box-shadow: 0 0 5px rgba(90, 90, 90, 0.5);
-}
-.button {
-    width: 100px;
-    height: 50px;
-    background-color: #919191;
-    border-radius: 10px;
-    border: 2px solid #707070;
-}
-.button:hover {
-    background-color: #707070;
-    border: 2px solid #424242;
-    box-shadow: 0 0 5px rgba(90, 90, 90, 0.5);
 }
 
 .leftVisual {

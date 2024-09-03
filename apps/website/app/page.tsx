@@ -30,6 +30,8 @@ export default function Index() {
         ease: 'power2.in',
       }
     );
+
+    window.scrollTo(0, 0);
   }, []);
 
   return (
