@@ -8,8 +8,8 @@ A platform for managing and sharing your common expenses.
 Manage, track, and share your finances effortlessly with WalletSpace. Whether you want to split a bill or monitor your financial health together with your housemates, we've got you covered. Stay on top of your finances with intuitive tools that keep everyone on the same page.
 
 </div>
-  <div style="flex: 1;" align="right">
-  <img src="libs/assets/images/logo-lockup-bright.svg#gh-light-mode-only" height="100px" alt="WalletSpace logo (bright mode)">
+  <div style="flex: 1.5;" align="right">
+  <img src="libs/assets/images/logo-lockup-light.svg#gh-light-mode-only" height="100px" alt="WalletSpace logo (light mode)">
   <img src="libs/assets/images/logo-lockup-dark.svg#gh-dark-mode-only" height="100px" alt="WalletSpace logo (dark mode)">
 </div>
 </div>

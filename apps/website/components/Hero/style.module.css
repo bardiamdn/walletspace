@@ -1,64 +1,79 @@
+@import url('https://fonts.googleapis.com/css2?family=Albert+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+
 .heroContainer{
+    position: relative;
+    display: flex;
     width: 100%;
     height: 100vh;
-    display: flex;
-    justify-content: space-between;
-    /* align-items: center; */
-    /* background-color: rgb(73, 73, 73); */
+    z-index: 0;
+    overflow: hidden;
+    background-image: 
+        /* radial-gradient(circle, #ffffffab 5%, transparent 140%), */
+        url('/hero-demo-4.svg'); /* Change to the actual path of your image */
+    background-size: cover; 
+    background-position: center; 
+    background-repeat: no-repeat;
+    /* filter: blur(1); */
+    /* filter: brightness(0.6); */
+    /* box-sizing: border-box; */
+    /* color: white; */
 }
 .ctaContainer {
-    /* background-color: #cccccc; */
     display: flex;
     flex-direction: column;
     align-items: center;
     margin-top: calc(0.2 * 100vh);
+    flex: 1;
+    /* box-sizing: border-box; */
 }
 .header {
-    /* font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; */
-    font-family: Arial, Helvetica, sans-serif;
     font-weight: 700;
     line-height: 64px;
-    font-size: 60px;
+    font-size: 64px;
+    margin-bottom: 3rem;
 }
 .subHeader {
-    font-family: Arial, Helvetica, sans-serif;
-    font-style: inherit;
-    font-size: 35px;
-    font-weight: 400;
+    font-size: 30px;
+    font-weight: 600;
     line-height: 32px;
+    margin-bottom: 3rem;
     color: #414141;
 }
-.form {
+
+.leftVisual {
+    margin-top: 300px;
+    flex: 1;
     display: flex;
-    flex-direction: column;
-    /* background-color: #969696; */
-    /* justify-content: center; */
-    align-items: flex-start;
-    padding-top: 72px;
+    justify-content: center;
 }
-.input {
-    width: 300px;
-    height: 50px;
-    border-radius: 10px; /* Reduced for a smoother look */
-    border: 2px solid #707070; /* Slightly thicker and lighter color */
-    padding: 10px; /* Adds space inside the input */
-    font-size: 16px; /* Adjusts font size for better readability */
-    outline: none; /* Removes default outline on focus */
-    margin-right: 20px;
+
+.rightVisual {
+    margin-top: 300px;
+    flex: 1;
+    display: flex;
+    justify-content: center;
 }
-.input:focus {
-    border-color: #5A5A5A; /* Slightly darker color on focus */
-    box-shadow: 0 0 5px rgba(90, 90, 90, 0.5); /* Adds a subtle shadow on focus */
-}
-.button {
-    width: 100px;
-    height: 50px;
-    background-color: #919191;
-    border-radius: 10px; /* Reduced for a smoother look */
-    border: 2px solid #707070; /* Slightly thicker and lighter color */
-}
-.button:hover {
-    background-color: #707070;
-    border: 2px solid #424242; /* Slightly thicker and lighter color */
-    box-shadow: 0 0 5px rgba(90, 90, 90, 0.5); /* Adds a subtle shadow on focus */
+
+@media (max-width: 768px) {
+    .heroContainer {
+        background-image: none;
+    }
+    .ctaContainer {
+        margin-top: 4rem;
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+    .ctaContainer h1 {
+        line-height: 48px;
+        font-size: 45px;
+        margin-bottom: 1.5rem;
+    }
+    .ctaContainer h4 {
+        font-size: 25px;
+        line-height: 32px;
+        margin-bottom: 1.5rem;
+    }
+    .leftVisual, .rightVisual {
+        display: none;
+    }
 }

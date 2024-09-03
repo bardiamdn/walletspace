@@ -1,18 +1,53 @@
 'use client';
-import { useEffect, useRef } from 'react';
+import React, { useLayoutEffect, useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
+// import LocomotiveScroll from 'locomotive-scroll';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 import styles from './style.module.css';
-import classNames from 'classnames';
-
-// import styles from './style.module.css';
 
 export default function Index() {
   const leftDiamondRef = useRef<SVGPathElement | null>(null);
   const rightDiamondRef = useRef<SVGPathElement | null>(null);
   const shadowRef = useRef<SVGPathElement | null>(null);
 
+  // const scrollRef = useRef(null);
+  const containerRef = useRef(null);
+  const directionRef = useRef(1);
+
   useEffect(() => {
+    gsap.registerPlugin(ScrollTrigger);
+
+    gsap.to(containerRef.current, {
+      scrollTrigger: {
+        trigger: document.body,
+        start: 0,
+        end: window.innerHeight,
+        onUpdate: (e) => {
+          directionRef.current = e.direction;
+          requestAnimationFrame(animate);
+        },
+      },
+    });
+
+    const animate = () => {
+      if (directionRef.current === 1) {
+        gsap.to(containerRef.current, {
+          y: '-100%',
+          duration: 0.3,
+          ease: 'power2.out',
+        });
+      } else if (directionRef.current === -1) {
+        // Scrolling up
+        gsap.to(containerRef.current, {
+          y: '0%',
+          duration: 0.3,
+          ease: 'power2.out',
+        });
+      }
+      // requestAnimationFrame(animate);
+    };
+
     const svgContainer = document.getElementById('svgContainer');
 
     // Define the animation timeline
@@ -21,11 +56,11 @@ export default function Index() {
       .to([rightDiamondRef.current, shadowRef.current], {
         x: -20,
         duration: 0.25,
-        ease: 'power1.in',
+        ease: 'power1.inOut',
       })
       .to(
         leftDiamondRef.current,
-        { x: 20, duration: 0.25, ease: 'power1.in' },
+        { x: 20, duration: 0.25, ease: 'power1.inOut' },
         '<'
       );
     const animationLeave = gsap
@@ -33,11 +68,11 @@ export default function Index() {
       .to([rightDiamondRef.current, shadowRef.current], {
         x: 0,
         duration: 0.25,
-        ease: 'power1.out',
+        ease: 'power1.inOut',
       })
       .to(
         leftDiamondRef.current,
-        { x: 0, duration: 0.25, ease: 'power1.out' },
+        { x: 0, duration: 0.25, ease: 'power1.inOut' },
         '<'
       );
 
@@ -69,10 +104,13 @@ export default function Index() {
         svgContainer.removeEventListener('mouseenter', handleMouseEnter);
         svgContainer.removeEventListener('mouseleave', handleMouseLeave);
       }
+
+      //   // kill scroll trigger
+      //   ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
     };
   }, []);
   return (
-    <header className={classNames('px-3 py-3', styles.headerContainer)}>
+    <header className={styles.headerContainer} ref={containerRef}>
       <div id="svgContainer" className="flex items-center border-white">
         <svg
           width="46.1"
@@ -110,6 +148,16 @@ export default function Index() {
             fill="#252525"
           />
         </svg>
+      </div>
+      <div className={styles.link}>
+        <a
+          className="font-semibold"
+          href="https://x.com/thewalletspace"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          X (Twitter)
+        </a>
       </div>
     </header>
   );
