@@ -3,21 +3,20 @@ const fs = require('fs');
 const path = require('path');
 
 function genKeyPair() {
-  
   // Generates an object where the keys are stored in properties `privateKey` and `publicKey`
   const keyPair = crypto.generateKeyPairSync('rsa', {
     modulusLength: 4096, // bits - standard for RSA keys
     publicKeyEncoding: {
-      type: 'pkcs1', // "Public Key Cryptography Standards 1" 
-      format: 'pem'
+      type: 'pkcs1', // "Public Key Cryptography Standards 1"
+      format: 'pem',
     },
     privateKeyEncoding: {
       type: 'pkcs1',
-      format: 'pem'
-    }
+      format: 'pem',
+    },
   });
 
-  const keysDir = path.join(__dirname, '../../../../libs/keys');
+  const keysDir = path.join(__dirname, '../../../../secrets/newKeys');
 
   // Check if the directory exists, if not, create it
   if (!fs.existsSync(keysDir)) {
@@ -27,7 +26,7 @@ function genKeyPair() {
   const publicKeyPath = path.join(keysDir, 'id_rsa_pub.pem');
   const privateKeyPath = path.join(keysDir, 'id_rsa_priv.pem');
 
-  fs.writeFileSync(publicKeyPath, keyPair.publicKey); 
+  fs.writeFileSync(publicKeyPath, keyPair.publicKey);
   fs.writeFileSync(privateKeyPath, keyPair.privateKey);
 }
 

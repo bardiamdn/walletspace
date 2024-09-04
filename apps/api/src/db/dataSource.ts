@@ -1,4 +1,5 @@
 import 'reflect-metadata'
+import dotenv from 'dotenv'
 import { DataSource } from 'typeorm';
 import { User } from './entities/User';
 import { Profile } from './entities/Profile';
@@ -10,9 +11,11 @@ import { Invitation } from './entities/Invitation';
 import { Comment } from './entities/Comment';
 import { Scan } from './entities/Scan';
 
+dotenv.config()
+
 export const AppDataSource = new DataSource({
   "type": "postgres",
-  "host": "localhost",
+  "host": process.env.DB_HOST,
   "port": 5432,
   "username": "postgres",
   "password": "myPassword",

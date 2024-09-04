@@ -7,10 +7,11 @@ import dotenv from 'dotenv'
 
 import { User } from '../db/entities/User';
 import { JWTVerification } from '../types/jwt';
+// import { PRIV_KEY } from './keyLoader';
 
 dotenv.config()
 
-const privKeyPath = path.join('./secrets/development/keys/', 'id_rsa_priv.pem');
+const privKeyPath = path.join(process.env.KEYS_PATH as string, 'id_rsa_priv.pem');
 const PRIV_KEY = fs.readFileSync(privKeyPath, 'utf8');
 
 

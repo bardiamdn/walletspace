@@ -1,5 +1,6 @@
 import express from 'express';
 import cors from 'cors';
+import dotenv from 'dotenv'
 
 import { AppDataSource } from './db/dataSource';
 
@@ -12,6 +13,8 @@ import spaceRoutes from './routes/space.route';
 import invitationRoute from './routes/invitation.route';
 import commentRoutes from './routes/comment.route'
 import scannerRoute from './routes/scanner.route'
+
+dotenv.config()
 
 
 AppDataSource
@@ -28,7 +31,7 @@ const app = express();
 app.use(cors({
   origin: 'http://localhost:3001', // Adjust later for production
   methods: 'GET,POST,PUT,PATCH,DELETE',
-  credentials: true, 
+  credentials: true,
   allowedHeaders: 'Authorization, Content-Type',
 }));
 
@@ -46,6 +49,6 @@ app.use('/', commentRoutes);
 app.use('/', scannerRoute)
 
 
-app.listen(3000, () => console.log("server running on port 3000"))
+app.listen(process.env.PORT || 3000, () => console.log(`server running on port ${process.env.PORT}`))
 
 export { app }
