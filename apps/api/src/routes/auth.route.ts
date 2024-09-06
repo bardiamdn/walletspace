@@ -13,7 +13,8 @@ import * as utils from '../lib/utils';
 import authMiddleware from '../middlewares/authMiddleware';
 
 dotenv.config();
-const publicKeyPath = path.join('./secrets/development/keys/', 'id_rsa_pub.pem');
+
+const publicKeyPath = path.join(process.env.KEYS_PATH as string, 'id_rsa_pub.pem');
 const PUB_KEY = fs.readFileSync(publicKeyPath, 'utf8');
 
 

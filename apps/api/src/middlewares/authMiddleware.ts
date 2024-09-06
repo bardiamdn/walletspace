@@ -7,7 +7,7 @@ import { verify } from 'jsonwebtoken';
 import { AppDataSource } from '../db/dataSource';
 import { User } from '../db/entities/User';
 
-const publicKeyPath = path.join('./secrets/development/keys/', 'id_rsa_pub.pem');
+const publicKeyPath = path.join(process.env.KEYS_PATH as string, 'id_rsa_pub.pem');
 const PUB_KEY = fs.readFileSync(publicKeyPath, 'utf8');
 
 // Middleware for JWT authentication
