@@ -1,0 +1,26 @@
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'gcr.io/$PROJECT_ID/api-service', '.']
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/$PROJECT_ID/api-service']
+
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args:
+      [
+        'run',
+        'deploy',
+        'api-service',
+        '--image',
+        'gcr.io/$PROJECT_ID/api-service',
+        '--platform',
+        'managed',
+        '--region',
+        'europe-west1',
+        '--allow-unauthenticated',
+      ]
+
+subtitutions:
+  _REGION: 'europe-west1'
+
+timeout: '1200s'
