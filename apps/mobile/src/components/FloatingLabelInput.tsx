@@ -1,13 +1,28 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { View, Text, TextInput, StyleSheet, Animated, Easing, useColorScheme, TouchableOpacity } from 'react-native';
-import { Colors } from '@/constants/Colors';
+import {
+  View,
+  Text,
+  TextInput,
+  StyleSheet,
+  Animated,
+  Easing,
+  TouchableOpacity,
+} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { useColors } from '@/context/ColorContext';
 
 const AnimatedText = Animated.createAnimatedComponent(Text);
 
-const FloatingLabelInput = ({ label, value, onChangeText, secureTextEntry, keyboardType, autoCapitalize, screenPressed }: any) => {
-  const colorScheme = useColorScheme();
-  const colors = colorScheme === 'dark' ? Colors.dark : Colors.light;
+const FloatingLabelInput = ({
+  label,
+  value,
+  onChangeText,
+  secureTextEntry,
+  keyboardType,
+  autoCapitalize,
+  screenPressed,
+}: any) => {
+  const { colors } = useColors();
   const [isFocused, setIsFocused] = useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
@@ -50,9 +65,7 @@ const FloatingLabelInput = ({ label, value, onChangeText, secureTextEntry, keybo
 
   return (
     <View style={[styles.inputContainer, { borderColor: colors.border }]}>
-      <AnimatedText style={labelStyle}>
-        {label}
-      </AnimatedText>
+      <AnimatedText style={labelStyle}>{label}</AnimatedText>
       <TextInput
         ref={inputRef}
         style={[styles.input, { color: colors.textPrimary }]}
@@ -71,7 +84,11 @@ const FloatingLabelInput = ({ label, value, onChangeText, secureTextEntry, keybo
           onPressIn={() => setIsPasswordVisible(true)}
           onPressOut={() => setIsPasswordVisible(false)}
         >
-          <Ionicons name={isPasswordVisible? 'eye-off' : 'eye'} style={{color: colors.border}} size={22} />
+          <Ionicons
+            name={isPasswordVisible ? 'eye-off' : 'eye'}
+            style={{ color: colors.border }}
+            size={22}
+          />
         </TouchableOpacity>
       )}
     </View>

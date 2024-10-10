@@ -1,13 +1,21 @@
-import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
+import React, {
+  createContext,
+  useState,
+  useContext,
+  ReactNode,
+  useEffect,
+} from 'react';
 // import { QueryClient, QueryClientProvider, useMutation, useQuery } from '@tanstack/react-query';
-import axios from 'axios'
+import axios from 'axios';
 import * as SecureStore from 'expo-secure-store';
 
 interface AuthContextType {
   authenticated: boolean | undefined;
   setAuthenticated: React.Dispatch<React.SetStateAction<boolean | undefined>>;
+  token: string | null;
+  setToken: React.Dispatch<React.SetStateAction<string | null>>;
 }
-const validateUrl = process.env.EXPO_PUBLIC_API_URL_DEV + '/auth/validate'
+const validateUrl = process.env.EXPO_PUBLIC_API_URL_DEV + '/auth/validate';
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 // const queryClient = new QueryClient();
@@ -19,17 +27,20 @@ const checkAuthentication = async (token: string | null): Promise<boolean> => {
         Authorization: token,
       },
     });
-    
-    return response? response.status === 200 : false
+
+    return response ? response.status === 200 : false;
   } catch (error) {
     console.error('Error checking authentication status:', error);
     return false;
   }
-}
+};
 
-export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+export const AuthProvider: React.FC<{ children: ReactNode }> = ({
+  children,
+}) => {
   const [authenticated, setAuthenticated] = useState<boolean | undefined>();
-  
+  const [token, setToken] = useState<string | null>(null);
+
   // const { data: isAuthenticated, isLoading } = useQuery({
   //   queryKey: ['authCheck'],
   //   queryFn: checkAuthentication,
@@ -45,9 +56,10 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   useEffect(() => {
     const fetchAuthStatus = async () => {
       try {
-        const token = await SecureStore.getItemAsync('authToken');
-        
-        const isAuthenticated = await checkAuthentication(token);
+        const storedToken = await SecureStore.getItemAsync('authToken');
+        setToken(storedToken);
+
+        const isAuthenticated = await checkAuthentication(storedToken);
         setAuthenticated(isAuthenticated);
       } catch (error) {
         console.error('Error fetching authentication status:', error);
@@ -59,9 +71,11 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   return (
     // <QueryClientProvider client={queryClient}>
-      <AuthContext.Provider value={{ authenticated, setAuthenticated }}>
-        {children}
-      </AuthContext.Provider>
+    <AuthContext.Provider
+      value={{ authenticated, setAuthenticated, token, setToken }}
+    >
+      {children}
+    </AuthContext.Provider>
     // </QueryClientProvider>
   );
 };

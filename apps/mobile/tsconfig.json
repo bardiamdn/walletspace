@@ -10,9 +10,7 @@
     "strict": true,
     "declaration": true,
     "paths": {
-      "@/*": [
-        "./apps/mobile/*"
-      ]
+      "@/*": ["./apps/mobile/src/*"]
     }
   },
   "files": [],

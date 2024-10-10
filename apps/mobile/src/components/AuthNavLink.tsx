@@ -1,7 +1,8 @@
 import React, { useRef } from 'react';
-import { Text, Pressable, StyleSheet, Animated, useColorScheme, ViewStyle } from 'react-native';
+import { Text, Pressable, StyleSheet, Animated, ViewStyle } from 'react-native';
 import { Link } from 'expo-router';
 import { Colors } from '@/constants/Colors';
+import { useColors } from '@/context/ColorContext';
 
 interface AnimatedLinkProps {
   text: string;
@@ -10,9 +11,8 @@ interface AnimatedLinkProps {
 }
 
 const AnimatedLink: React.FC<AnimatedLinkProps> = ({ text, link, style }) => {
-  const colorScheme = useColorScheme();
-  const colors = colorScheme === 'dark' ? Colors.dark : Colors.light;
-  
+  const { colors } = useColors();
+
   const scaleValue = useRef(new Animated.Value(1)).current;
   const colorValue = useRef(new Animated.Value(0)).current;
 
@@ -62,9 +62,11 @@ const AnimatedLink: React.FC<AnimatedLinkProps> = ({ text, link, style }) => {
       color: colors.primary,
     },
   });
-  
+
   return (
-    <Animated.View style={[styles.link, { transform: [{ scale: scaleValue }] }]}>
+    <Animated.View
+      style={[styles.link, { transform: [{ scale: scaleValue }] }]}
+    >
       <Link href={link} onPressIn={handlePressIn} onPressOut={handlePressOut}>
         <Animated.Text style={[styles.linkText, { color: textColor }]}>
           {text}

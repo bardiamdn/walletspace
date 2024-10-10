@@ -1,7 +1,8 @@
 import React, { useRef } from 'react';
-import { Text, Pressable, StyleSheet, Animated, useColorScheme, ViewStyle } from 'react-native';
+import { Text, Pressable, StyleSheet, Animated, ViewStyle } from 'react-native';
 import { Link } from 'expo-router';
 import { Colors } from '@/constants/Colors';
+import { useColors } from '@/context/ColorContext';
 
 interface AnimatedButtonProps {
   text: string;
@@ -10,10 +11,13 @@ interface AnimatedButtonProps {
   style?: ViewStyle;
 }
 
-const AnimatedButton: React.FC<AnimatedButtonProps> = ({ text, link, icon, style }) => {
-  const colorScheme = useColorScheme();
-  const colors = colorScheme === 'dark' ? Colors.dark : Colors.light;
-  
+const AnimatedButton: React.FC<AnimatedButtonProps> = ({
+  text,
+  link,
+  icon,
+  style,
+}) => {
+  const { colors } = useColors();
   const scaleValue = useRef(new Animated.Value(1)).current;
   const backgroundColorValue = useRef(new Animated.Value(0)).current;
 
@@ -48,7 +52,7 @@ const AnimatedButton: React.FC<AnimatedButtonProps> = ({ text, link, icon, style
 
   const backgroundColor = backgroundColorValue.interpolate({
     inputRange: [0, 1],
-    outputRange: [colors.background, colors.pressButton]
+    outputRange: [colors.background, colors.pressButton],
   });
 
   const styles = StyleSheet.create({
@@ -74,11 +78,14 @@ const AnimatedButton: React.FC<AnimatedButtonProps> = ({ text, link, icon, style
         onPressOut={handlePressOut}
         style={style}
       >
-        <Animated.View style={[styles.button, { transform: [{ scale: scaleValue }], backgroundColor }]}>
+        <Animated.View
+          style={[
+            styles.button,
+            { transform: [{ scale: scaleValue }], backgroundColor },
+          ]}
+        >
           {icon && icon}
-          <Text style={styles.buttonText}>
-            {text}
-          </Text>
+          <Text style={styles.buttonText}>{text}</Text>
         </Animated.View>
       </Pressable>
     </Link>

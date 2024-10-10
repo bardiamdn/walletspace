@@ -29,7 +29,7 @@ AppDataSource
 const app = express();
 
 app.use(cors({
-  origin: 'http://localhost:3001', // Adjust later for production
+  origin: '*', // Adjust later for production
   methods: 'GET,POST,PUT,PATCH,DELETE',
   credentials: true,
   allowedHeaders: 'Authorization, Content-Type',
