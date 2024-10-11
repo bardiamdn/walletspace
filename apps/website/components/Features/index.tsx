@@ -9,7 +9,7 @@ import Form from './animation/Form';
 import Create from './animation/Create';
 
 export default function Index() {
-  const [isForm, setIsForm] = useState<boolean>(true);
+  const [formOpen, setFormOpen] = useState<boolean>(true);
   const titlesSectionRef = useRef(null);
   const descriptionsSectionRef = useRef(null);
 
@@ -125,7 +125,7 @@ export default function Index() {
         start: '5% 70%',
         end: '95% 50%',
         onEnter: () => {
-          setIsForm(false);
+          setFormOpen(false);
 
           const tl = gsap.timeline();
           tl.to(
@@ -177,7 +177,7 @@ export default function Index() {
           );
         },
         onEnterBack: () => {
-          setIsForm(false);
+          setFormOpen(false);
           gsap.to(animationRef.current, {
             height: '60vh',
             padding: '20px',
@@ -207,7 +207,7 @@ export default function Index() {
           });
         },
         onLeave: () => {
-          setIsForm(true);
+          setFormOpen(true);
           gsap.to(animationRef.current, {
             height: '100px',
             padding: 0,
@@ -237,7 +237,7 @@ export default function Index() {
           });
         },
         onLeaveBack: () => {
-          setIsForm(true);
+          setFormOpen(true);
           gsap.to(animationRef.current, {
             height: '100px',
             padding: 0,
@@ -287,7 +287,7 @@ export default function Index() {
     // return () => {
     //   ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
     // };
-  }, []);
+  }, [textRefs]);
 
   return (
     <div className={styles.mainContainer} ref={featuresSectionRef}>
@@ -309,14 +309,16 @@ export default function Index() {
         <div
           className={classNames(
             styles.animation
-            // isForm ? 'justify-center' : 'justify-start'
+            // formOpen ? 'justify-center' : 'justify-start'
           )}
         >
-          <Form
-            formRef={formRef}
-            formInputRef={formInputRef}
-            earlyAccessRef={earlyAccessRef}
-          />
+          {formOpen && (
+            <Form
+              formRef={formRef}
+              formInputRef={formInputRef}
+              earlyAccessRef={earlyAccessRef}
+            />
+          )}
           <Create createRef={createRef} />
           {/* <div className={styles.staySquare}>
             <div className="w-full flex flex-row justify-between items-center">

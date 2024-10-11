@@ -15,31 +15,16 @@ $border-color-light: #949494;
   // Titles and Descriptions Containers
   .titlesContainer,
   .descriptionsContainer {
+    height: 100vh;
+    padding-right: 40px;
     display: flex;
     flex: 1;
     flex-direction: column;
-  }
-
-  // Title Container
-  .titleContainer {
-    height: 100vh;
-    display: flex;
     align-items: center;
-    padding-right: 40px;
-
     h3 {
       font-weight: 700;
       font-size: 40px;
     }
-  }
-
-  // Description Container
-  .descriptionContainer {
-    height: 100vh;
-    display: flex;
-    align-items: center;
-    padding-left: 40px;
-
     li {
       font-size: 1.25rem;
       line-height: 1.75rem;
@@ -61,7 +46,6 @@ $border-color-light: #949494;
     flex: 1;
     padding: 0px;
     border: 2px solid #3b3b3b;
-
 
     .animation {
       position: relative;
