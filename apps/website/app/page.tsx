@@ -1,7 +1,6 @@
 'use client';
-import { useLayoutEffect, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 import Header from '../components/Header';
 import Hero from '../components/Hero';
@@ -26,7 +25,7 @@ export default function Index() {
       {
         // y: 0,
         opacity: 1,
-        duration: 0.5,
+        duration: 0.25,
         ease: 'power2.in',
       }
     );

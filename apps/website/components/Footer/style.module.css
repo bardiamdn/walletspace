@@ -1,5 +1,5 @@
 .footerContainer {
-    height: 50vh;
-    justify-content: center;
-    align-items: center;
+    height: 20vh;
+    width: 70%;
+    border: 2px solid blue;
 }

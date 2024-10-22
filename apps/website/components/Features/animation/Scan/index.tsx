@@ -1,18 +1,27 @@
 'use client';
 import { RefObject, useEffect, useRef } from 'react';
 import styles from './style.module.scss';
+import Image from 'next/image';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
-type CreateProps = {
+type ScanProps = {
   triggerRef: RefObject<HTMLDivElement>;
 };
 
-export default function Create({ triggerRef }: CreateProps) {
+export default function Scan({ triggerRef }: ScanProps) {
   const mainRef = useRef(null);
+  const glowingLine = useRef(null);
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
+
+    const lineAnimation = gsap.to(glowingLine.current, {
+      top: '100%',
+      duration: 3,
+      ease: 'power1.out',
+      paused: true,
+    });
 
     const mm = gsap.matchMedia();
 
@@ -28,6 +37,7 @@ export default function Create({ triggerRef }: CreateProps) {
             opacity: 1,
             duration: 0.5,
           });
+          lineAnimation.restart();
         },
         onEnterBack: () => {
           gsap.to(mainRef.current, {
@@ -36,6 +46,7 @@ export default function Create({ triggerRef }: CreateProps) {
             opacity: 1,
             duration: 0.5,
           });
+          lineAnimation.restart();
         },
         onLeave: () => {
           gsap.to(mainRef.current, {
@@ -44,6 +55,7 @@ export default function Create({ triggerRef }: CreateProps) {
             opacity: 0,
             duration: 0.5,
           });
+          lineAnimation.pause();
         },
         onLeaveBack: () => {
           gsap.to(mainRef.current, {
@@ -52,6 +64,7 @@ export default function Create({ triggerRef }: CreateProps) {
             opacity: 0,
             duration: 0.5,
           });
+          lineAnimation.pause();
         },
       });
     });
@@ -68,6 +81,7 @@ export default function Create({ triggerRef }: CreateProps) {
             opacity: 1,
             duration: 0.5,
           });
+          lineAnimation.restart();
         },
         onEnterBack: () => {
           gsap.to(mainRef.current, {
@@ -76,6 +90,7 @@ export default function Create({ triggerRef }: CreateProps) {
             opacity: 1,
             duration: 0.5,
           });
+          lineAnimation.restart();
         },
         onLeave: () => {
           gsap.to(mainRef.current, {
@@ -84,6 +99,7 @@ export default function Create({ triggerRef }: CreateProps) {
             opacity: 0,
             duration: 0.5,
           });
+          lineAnimation.pause();
         },
         onLeaveBack: () => {
           gsap.to(mainRef.current, {
@@ -92,6 +108,7 @@ export default function Create({ triggerRef }: CreateProps) {
             opacity: 0,
             duration: 0.5,
           });
+          lineAnimation.pause();
         },
       });
     });
@@ -105,7 +122,15 @@ export default function Create({ triggerRef }: CreateProps) {
 
   return (
     <div ref={mainRef} className={styles.main}>
-      <h1>Create animation placeholder</h1>
+      <Image
+        src="\homemade-Receipt.svg"
+        alt="Receipt"
+        width={450}
+        height={900}
+        quality={80}
+        priority
+      />
+      <div className={styles['glowing-line']} ref={glowingLine}></div>
     </div>
   );
 }

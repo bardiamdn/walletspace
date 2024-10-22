@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import styles from './style.module.scss';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -7,9 +7,12 @@ import classNames from 'classnames';
 
 import Form from './animation/Form';
 import Create from './animation/Create';
+import Scan from './animation/Scan';
+import Space from './animation/Space';
 
 export default function Index() {
   const [formOpen, setFormOpen] = useState<boolean>(true);
+  const [animationEnd, setAnimationEnd] = useState<boolean>(false);
   const titlesSectionRef = useRef(null);
   const descriptionsSectionRef = useRef(null);
 
@@ -19,156 +22,155 @@ export default function Index() {
   const firstTitleRef = useRef(null);
   const secondTitleRef = useRef(null);
   const thirdTitleRef = useRef(null);
-  const forthTitleRef = useRef(null);
+  const fourthTitleRef = useRef(null);
 
   const firstDescriptionRef = useRef(null);
   const secondDescriptionRef = useRef(null);
   const thirdDescriptionRef = useRef(null);
-  const forthDescriptionRef = useRef(null);
+  const fourthDescriptionRef = useRef(null);
 
   // form refs
   const formRef = useRef(null);
   const formInputRef = useRef(null);
   const earlyAccessRef = useRef(null);
 
-  // create refs
-  const createRef = useRef(null);
-
-  const textRefs = [
-    firstTitleRef,
-    secondTitleRef,
-    thirdTitleRef,
-    forthTitleRef,
-    firstDescriptionRef,
-    secondDescriptionRef,
-    thirdDescriptionRef,
-    forthDescriptionRef,
+  const titles = [
+    {
+      title: 'Extract all data by just scanning your receipts',
+      ref: firstTitleRef,
+    },
+    {
+      title: 'Select the items and assign it to your space',
+      ref: secondTitleRef,
+    },
+    {
+      title: 'Share or split items',
+      ref: thirdTitleRef,
+    },
   ];
 
-  useLayoutEffect(() => {
+  const descriptions = [
+    {
+      descriptionArray: [
+        'Let AI instantly extract items.',
+        'And other related data so you can easily manage all your data.',
+      ],
+      ref: firstDescriptionRef,
+    },
+    {
+      descriptionArray: [
+        'Share and split the items with your friends.',
+        'Track your shared spendings.',
+      ],
+      ref: secondDescriptionRef,
+    },
+    {
+      descriptionArray: [
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit,',
+        'sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+      ],
+      ref: thirdDescriptionRef,
+    },
+  ];
+
+  useEffect(() => {
+    const textRefs = [
+      firstTitleRef,
+      secondTitleRef,
+      thirdTitleRef,
+      fourthTitleRef,
+      firstDescriptionRef,
+      secondDescriptionRef,
+      thirdDescriptionRef,
+      fourthDescriptionRef,
+    ];
+
     gsap.registerPlugin(ScrollTrigger);
 
-    // titles and descriptions fade in and fade out
-    textRefs.forEach((ref, index) => {
-      const timeline = gsap.timeline({
-        scrollTrigger: {
-          trigger: ref.current,
-          start: 'top 50%', // Start animation when the top of the element reaches 80% of the viewport
-          end: 'bottom 50%', // End animation when the top of the element reaches 30% of the viewport
-          scrub: true,
-        },
-      });
-
-      timeline
-        .fromTo(
-          ref.current,
-          {
-            opacity: 0,
-          },
-          {
-            opacity: 1,
-            duration: 1,
-          }
-        )
-        .set(ref.current, {
-          opacity: 1, // Hold the opacity at 1 without any animation
-          delay: 1.5,
-        })
-        .to(ref.current, {
-          opacity: 0,
-          duration: 1,
-        });
-    });
-
-    // Space feature animation
-    // gsap
-    //   .timeline({
-    //     scrollTrigger: {
-    //       trigger: `.${styles.staySquare}`,
-    //       start: '-100% 30%',
-    //       end: '100% top',
-    //       scrub: true,
-    //       // markers: true,
-    //     },
-    //   })
-    //   .to(`.${styles.firstMessage}`, {
-    //     left: '0',
-    //     opacity: 1,
-    //     right: 'auto',
-    //   })
-    //   .to(`.${styles.firstMessage}`, {
-    //     delay: 0.25,
-    //     top: '70px',
-    //     height: '45px',
-    //     bottom: 'auto',
-    //   })
-    //   .to(`.${styles.secondMessage}`, {
-    //     left: 'auto',
-    //     right: '0',
-    //     opacity: 1,
-    //   })
-    //   .to(`.${styles.secondMessage}`, {
-    //     delay: 0.25,
-    //     top: '125px',
-    //     height: '45px',
-    //     bottom: 'auto',
-    //   });
-
-    // handle animation container
     const mm = gsap.matchMedia();
 
-    // Animations for desktop screens
+    // desktop animation
     mm.add('(min-width: 769px)', () => {
-      // animate the animation container
-      ScrollTrigger.create({
-        trigger: featuresSectionRef.current,
-        start: '5% 70%',
-        end: '95% 50%',
-        onEnter: () => {
-          setFormOpen(false);
+      textRefs.forEach((ref, index) => {
+        const timeline = gsap.timeline({
+          scrollTrigger: {
+            trigger: ref.current,
+            start: 'top 50%',
+            end: 'bottom 50%',
+            scrub: true,
+          },
+        });
 
-          const tl = gsap.timeline();
-          tl.to(
-            formRef,
+        timeline
+          .fromTo(
+            ref.current,
             {
               opacity: 0,
-              width: '100px',
-              duration: 0.3,
-              ease: 'power2.in',
             },
-            '<'
-            // '-=0.3' //start 0.3s before the previous animaiton ends
+            {
+              opacity: 1,
+              duration: 1,
+            }
           )
+          .set(ref.current, {
+            opacity: 1,
+            delay: 1.5,
+          })
+          .to(ref.current, {
+            opacity: 0,
+            duration: 0.5,
+          });
+      });
+
+      // form animation
+      ScrollTrigger.create({
+        trigger: titlesSectionRef.current,
+        start: 'top center',
+        end: 'bottom center',
+        onEnter: () => {
+          setFormOpen(false);
+          const tl = gsap.timeline();
+          tl
+            // .to(
+            //   formInputRef.current,
+            //   {
+            //     width: '100px',
+            //     opacity: 0,
+            //     duration: 0.3,
+            //     ease: 'power2.in',
+            //   },
+            //   '<'
+            //start 0.3s before the previous animaiton ends
+            // )
+            //   .to(
+            //     earlyAccessRef.current,
+            //     {
+            //       width: '100px',
+            //       right: '25%',
+            //       opacity: 0,
+            //       duration: 0.3,
+            //       ease: 'power2.in',
+            //     },
+            //     '<'
+            //start 0.3s before the previous animaiton ends
+            //   )
             .to(
-              formInputRef.current,
+              formRef.current,
               {
-                width: '100px',
                 opacity: 0,
+                width: 0,
+                height: 0,
                 duration: 0.3,
                 ease: 'power2.in',
               },
-              '<'
-              // '-=0.3' //start 0.3s before the previous animaiton ends
-            )
-            .to(
-              earlyAccessRef.current,
-              {
-                width: '100px',
-                right: '25%',
-                opacity: 0,
-                duration: 0.3,
-                ease: 'power2.in',
-              },
-              '<'
-              // '-=0.3' //start 0.3s before the previous animaiton ends
+              '<' //start 0.3s before the previous animaiton ends
             );
 
           tl.to(
             animationRef.current,
             {
               height: '60vh',
-              padding: '20px',
-              transform: 'translate(-50%, -50%)',
+              transform: 'translateY(-50%)',
               duration: 0.5,
               delay: 0.5,
               ease: 'power2.inOut',
@@ -180,28 +182,28 @@ export default function Index() {
           setFormOpen(false);
           gsap.to(animationRef.current, {
             height: '60vh',
-            padding: '20px',
-            transform: 'translate(-50%, -50%)',
+            transform: 'translateY(-50%)',
             duration: 0.5,
             delay: 0.5,
             ease: 'power2.inOut',
           });
-          gsap.to(formRef, {
+          // gsap.to(formInputRef.current, {
+          //   width: '100px',
+          //   opacity: 0,
+          //   duration: 0.3,
+          //   ease: 'power2.in',
+          // });
+          // gsap.to(earlyAccessRef.current, {
+          //   width: '100px',
+          //   right: '25%',
+          //   opacity: 0,
+          //   duration: 0.3,
+          //   ease: 'power2.in',
+          // });
+          gsap.to(formRef.current, {
             opacity: 0,
-            // width: '100px',
-            duration: 0.3,
-            ease: 'power2.in',
-          });
-          gsap.to(formInputRef.current, {
-            width: '100px',
-            opacity: 0,
-            duration: 0.3,
-            ease: 'power2.in',
-          });
-          gsap.to(earlyAccessRef.current, {
-            width: '100px',
-            right: '25%',
-            opacity: 0,
+            width: 0,
+            height: 0,
             duration: 0.3,
             ease: 'power2.in',
           });
@@ -210,28 +212,28 @@ export default function Index() {
           setFormOpen(true);
           gsap.to(animationRef.current, {
             height: '100px',
-            padding: 0,
-            transform: 'translate(-50%, 200px)',
+            transform: 'translateY(0)',
             duration: 0.5,
             delay: 0.5,
             ease: 'power2.inOut',
           });
-          gsap.to(formRef, {
+          // gsap.to(formInputRef.current, {
+          //   width: '400px',
+          //   opacity: 1,
+          //   duration: 0.3,
+          //   ease: 'power2.in',
+          // });
+          // gsap.to(earlyAccessRef.current, {
+          //   width: '150px',
+          //   right: '0',
+          //   opacity: 1,
+          //   duration: 0.3,
+          //   ease: 'power2.in',
+          // });
+          gsap.to(formRef.current, {
             opacity: 1,
-            // width: '100px',
-            duration: 0.3,
-            ease: 'power2.in',
-          });
-          gsap.to(formInputRef.current, {
             width: '400px',
-            opacity: 1,
-            duration: 0.3,
-            ease: 'power2.in',
-          });
-          gsap.to(earlyAccessRef.current, {
-            width: '150px',
-            right: '0',
-            opacity: 1,
+            height: '100%',
             duration: 0.3,
             ease: 'power2.in',
           });
@@ -240,28 +242,28 @@ export default function Index() {
           setFormOpen(true);
           gsap.to(animationRef.current, {
             height: '100px',
-            padding: 0,
-            transform: 'translate(-50%, -400px)',
+            transform: 'translateY(-35vh)',
             duration: 0.5,
             delay: 0.5,
             ease: 'power2.inOut',
           });
-          gsap.to(formRef, {
+          // gsap.to(formInputRef.current, {
+          //   width: '400px',
+          //   opacity: 1,
+          //   duration: 0.3,
+          //   ease: 'power2.in',
+          // });
+          // gsap.to(earlyAccessRef.current, {
+          //   width: '150px',
+          //   right: '0',
+          //   opacity: 1,
+          //   duration: 0.3,
+          //   ease: 'power2.in',
+          // });
+          gsap.to(formRef.current, {
             opacity: 1,
-            // width: '100px',
-            duration: 0.3,
-            ease: 'power2.in',
-          });
-          gsap.to(formInputRef.current, {
             width: '400px',
-            opacity: 1,
-            duration: 0.3,
-            ease: 'power2.in',
-          });
-          gsap.to(earlyAccessRef.current, {
-            width: '150px',
-            right: '0',
-            opacity: 1,
+            height: '100%',
             duration: 0.3,
             ease: 'power2.in',
           });
@@ -270,124 +272,150 @@ export default function Index() {
     });
 
     // Animations for mobile screens
-    // mm.add('(max-width: 768px)', () => {
-    //   gsap.to(animationRef.current, {
-    //     scrollTrigger: {
-    //       trigger: featuresSectionRef.current,
-    //       start: '-50px 80%',
-    //       end: '200px 80%',
-    //       scrub: true,
-    //       markers: false,
-    //     },
-    //     // opacity: 1,
-    //     transform: 'translate(0, -50%)',
-    //   });
-    // });
+    mm.add('(max-width: 768px)', () => {
+      ScrollTrigger.create({
+        trigger: featuresSectionRef.current,
+        start: 'top top',
+        end: 'bottom top',
+        scrub: true,
+        pin: true,
+        onEnter: () => {
+          setFormOpen(false);
+          const tl = gsap.timeline();
+          // tl.to(
+          //   formRef.current,
+          //   {
+          //     opacity: 0,
+          //     width: 0,
+          //     height: 0,
+          //     duration: 0.3,
+          //     ease: 'power2.in',
+          //   },
+          //   '<'
+          //start 0.3s before the previous animaiton ends
+          // );
 
-    // return () => {
-    //   ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
-    // };
-  }, [textRefs]);
+          tl.to(animationRef.current, {
+            height: '100%',
+            transform: 'translateY(0)',
+            duration: 0.5,
+            delay: 0.5,
+            ease: 'power2.inOut',
+          });
+        },
+        onEnterBack: () => {
+          setFormOpen(false);
+          gsap.to(animationRef.current, {
+            height: '100%',
+            transform: 'translateY(0)',
+            duration: 0.5,
+            delay: 0.5,
+            ease: 'power2.inOut',
+          });
+        },
+        onLeave: () => {
+          setFormOpen(true);
+          gsap.to(animationRef.current, {
+            height: '100px',
+            transform: 'translateY(45vh)',
+            duration: 0.5,
+            delay: 0.5,
+            ease: 'power2.inOut',
+          });
+        },
+        onLeaveBack: () => {
+          setFormOpen(true);
+          gsap.to(animationRef.current, {
+            height: '100px',
+            transform: 'translateY(-60vh)',
+            duration: 0.5,
+            delay: 0.5,
+            ease: 'power2.inOut',
+          });
+        },
+        onUpdate: (self) => {
+          const scrollProgress = self.progress;
+          gsap.to(titlesSectionRef.current, {
+            scrollTop: scrollProgress * 300,
+          });
+          gsap.to(descriptionsSectionRef.current, {
+            scrollTop: scrollProgress * 300,
+          });
+        },
+      });
+    });
+
+    return () => {
+      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
+    };
+  }, []);
 
   return (
     <div className={styles.mainContainer} ref={featuresSectionRef}>
-      <section className={styles.titlesContainer} ref={titlesSectionRef}>
-        <div className={styles.titleContainer} ref={firstTitleRef}>
-          <h3>Create a space and add your friends</h3>
-        </div>
-        <div className={styles.titleContainer} ref={secondTitleRef}>
-          <h3>Scan your receipts and assign extracted items to your friend</h3>
-        </div>
-        <div className={styles.titleContainer} ref={thirdTitleRef}>
-          <h3>Manage and analyze your spendings together</h3>
-        </div>
-        <div className={styles.titleContainer} ref={forthTitleRef}>
-          <h3>That&apos;s it</h3>
-        </div>
+      <section
+        className={styles.titlesContainer}
+        ref={titlesSectionRef}
+        data-scroll-section
+      >
+        {titles.map((titleObj, index) => (
+          <div
+            key={index}
+            className={styles.titleContainer}
+            ref={titleObj.ref}
+            data-scroll
+          >
+            <h3>{titleObj.title}</h3>
+          </div>
+        ))}
       </section>
-      <section className={styles.animationContainer} ref={animationRef}>
-        <div
-          className={classNames(
-            styles.animation
-            // formOpen ? 'justify-center' : 'justify-start'
-          )}
-        >
-          {formOpen && (
-            <Form
-              formRef={formRef}
-              formInputRef={formInputRef}
-              earlyAccessRef={earlyAccessRef}
-            />
-          )}
-          <Create createRef={createRef} />
-          {/* <div className={styles.staySquare}>
-            <div className="w-full flex flex-row justify-between items-center">
-              <h4>🏡 Home</h4>
-              <div className="flex flex-row ">
-                <p className="text-lg">This month spending:</p>
-                <p className="text-red-600 text-xl ml-2 font-bold">72</p>
-              </div>
-            </div>
-            <hr className="opacity-0" />
-            <div>
-              <div className={styles.firstMessage}>
-                Elif spent 21$ on groceries
-              </div>
-              <div className={styles.secondMessage}>
-                Carlos spent 43$ on food
-              </div>
-            </div>
-          </div> */}
+      <section
+        className={classNames(
+          styles.animationPlaceholder
+          // animationEnd ? 'translate-x-2/4 translate-y-2/4' : ''
+        )}
+        data-scroll-section
+      >
+        <div className={styles.animationContainer} ref={animationRef}>
+          <div
+            className={classNames(
+              styles.animation
+              // formOpen ? 'justify-center' : 'justify-start'
+            )}
+          >
+            {formOpen && (
+              <Form
+                formRef={formRef}
+                formInputRef={formInputRef}
+                earlyAccessRef={earlyAccessRef}
+              />
+            )}
+            <Create triggerRef={firstTitleRef} />
+            <Scan triggerRef={secondTitleRef} />
+            <Space triggerRef={thirdTitleRef} />
+          </div>
         </div>
       </section>
       <section
         className={styles.descriptionsContainer}
         ref={descriptionsSectionRef}
+        data-scroll-section
       >
-        <div className={styles.descriptionContainer} ref={firstDescriptionRef}>
-          <ul>
-            <li>Lorem ipsum odor amet, consectetuer adipiscing elit.</li>
-            <li>
-              Dolor aenean platea varius; praesent penatibus non fermentum
-              facilisis.
-            </li>
-            <li>
-              Interdum justo aptent ultricies vulputate accumsan nascetur ante
-              iaculis.
-            </li>
-          </ul>
-        </div>
-        <div className={styles.descriptionContainer} ref={secondDescriptionRef}>
-          <ul>
-            <li>Lorem ipsum odor amet, consectetuer adipiscing elit.</li>
-            <li>
-              Dolor aenean platea varius; praesent penatibus non fermentum
-              facilisis.
-            </li>
-          </ul>
-        </div>
-        <div className={styles.descriptionContainer} ref={thirdDescriptionRef}>
-          <ul>
-            <li>Lorem ipsum odor amet, consectetuer adipiscing elit.</li>
-            <li>
-              Dolor aenean platea varius; praesent penatibus non fermentum
-              facilisis.
-            </li>
-            <li>
-              Interdum justo aptent ultricies vulputate accumsan nascetur ante
-              iaculis.
-            </li>
-          </ul>
-        </div>
-        <div className={styles.descriptionContainer} ref={forthDescriptionRef}>
-          <ul>
-            <li>Lorem ipsum odor amet, consectetuer adipiscing elit.</li>
-            <li>
-              Dolor aenean platea varius; praesent penatibus non fermentum
-              facilisis.
-            </li>
-          </ul>
-        </div>
+        {descriptions.map((descriptionObj, index) => (
+          <div
+            key={index}
+            className={styles.descriptionContainer}
+            ref={descriptionObj.ref}
+            data-scroll
+          >
+            <ul>
+              {descriptionObj.descriptionArray.map(
+                (description, descriptionIndex) => (
+                  <li key={descriptionIndex}>{description}</li>
+                )
+              )}
+            </ul>
+          </div>
+        ))}
       </section>
     </div>
   );

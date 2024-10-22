@@ -5,26 +5,39 @@ $border-color-light: #949494;
 
 // Main Container
 .mainContainer {
-  position: relative;
   display: flex;
-  width: 70%;
+  width: 80%;
   margin: 0;
   z-index: 1;
-  // box-sizing: border-box;
+  height: fit-content;
 
-  // Titles and Descriptions Containers
   .titlesContainer,
   .descriptionsContainer {
-    height: 100vh;
-    padding-right: 40px;
     display: flex;
     flex: 1;
+    height: 300vh;
     flex-direction: column;
+  }
+
+  .titleContainer {
+    height: 100vh;
+    display: flex;
     align-items: center;
+    padding-right: 40px;
+
     h3 {
+      text-align: center;
       font-weight: 700;
       font-size: 40px;
     }
+  }
+
+  .descriptionContainer {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    padding-left: 40px;
+
     li {
       font-size: 1.25rem;
       line-height: 1.75rem;
@@ -32,20 +45,23 @@ $border-color-light: #949494;
     }
   }
 
-  // Animation Container
-  .animationContainer {
+  .animationPlaceholder {
+    position: relative;
     display: flex;
+    justify-content: center;
+    flex: 1;
+    height: 340vh;
+  }
+  .animationContainer {
+    position: sticky;
     border-radius: 40px;
     background: linear-gradient(to bottom, #cfdbe27e, #97c2db7e);
-    position: sticky;
     top: 50%;
-    left: 50%;
-    transform: translate(-50%, -400px);
+    transform: translateY(-35vh);
     height: 100px;
     width: 100%;
-    flex: 1;
-    padding: 0px;
-    border: 2px solid #3b3b3b;
+    padding: 20px;
+    border: 3px solid #3b3b3b;
 
     .animation {
       position: relative;
@@ -57,55 +73,32 @@ $border-color-light: #949494;
       justify-content: center;
       align-items: center;
       overflow: hidden;
-
-      .staySquare {
-        display: flex;
-        flex-direction: column;
-        width: 100%;
-        height: 60px;
-        padding: 15px;
-        border-radius: 25px;
-        background-color: #fff;
-
-        .firstMessage,
-        .secondMessage {
-          position: absolute;
-          background-color: #fff;
-          padding: 10px 15px;
-          border-radius: 15px;
-          opacity: 0;
-        }
-
-        .firstMessage {
-          right: 100%;
-          bottom: 0;
-          width: 250px;
-        }
-
-        .secondMessage {
-          left: 100%;
-          bottom: 0;
-          width: 300px;
-        }
-      }
     }
   }
+}
 
-  // Media Queries
-  @media (max-width: 768px) {
-    display: auto;
+@media (max-width: 768px) {
+  .mainContainer {
     flex-direction: column;
-    overflow: hidden;
     width: 100%;
     height: 100vh;
+    margin-bottom: 100vh;
 
     .titlesContainer,
     .descriptionsContainer {
+      height: 25vh;
       overflow-y: hidden;
+      flex: 1;
+    }
+    .animationPlaceholder {
+      height: 50vh;
+      flex: 2;
     }
 
     .animationContainer {
-      width: 100%;
+      max-width: 90%;
+      min-width: 200px;
+      transform: translateY(-60vh);
     }
 
     .titleContainer,

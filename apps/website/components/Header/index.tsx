@@ -22,7 +22,7 @@ export default function Index() {
       scrollTrigger: {
         trigger: document.body,
         start: 0,
-        end: window.innerHeight,
+        end: ScrollTrigger.maxScroll(window),
         onUpdate: (e) => {
           directionRef.current = e.direction;
           requestAnimationFrame(animate);
@@ -111,7 +111,11 @@ export default function Index() {
   }, []);
   return (
     <header className={styles.headerContainer} ref={containerRef}>
-      <div id="svgContainer" className="flex items-center border-white">
+      <a
+        id="svgContainer"
+        className="flex items-center border-white"
+        href="https://wallet-space.com"
+      >
         <svg
           width="46.1"
           height="35.6"
@@ -148,7 +152,7 @@ export default function Index() {
             fill="#252525"
           />
         </svg>
-      </div>
+      </a>
       <div className={styles.link}>
         <a
           className="font-semibold"

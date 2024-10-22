@@ -1,79 +1,64 @@
 @import url('https://fonts.googleapis.com/css2?family=Albert+Sans:ital,wght@0,100..900;1,100..900&display=swap');
 
+.main {
+  width: 100%;
+  height: 100vh;
+  padding: 0;
+}
+
 .heroContainer{
     position: relative;
     display: flex;
+    justify-content: center;
     width: 100%;
-    height: 100vh;
+    height: 100%;
     z-index: 0;
     overflow: hidden;
     background-image: 
         /* radial-gradient(circle, #ffffffab 5%, transparent 140%), */
-        url('/hero-demo-4.svg'); /* Change to the actual path of your image */
+        url('/hero-demo-4.svg');
     background-size: cover; 
     background-position: center; 
     background-repeat: no-repeat;
-    /* filter: blur(1); */
-    /* filter: brightness(0.6); */
-    /* box-sizing: border-box; */
-    /* color: white; */
+    text-align: center;
+    border-radius: 50px;
 }
 .ctaContainer {
     display: flex;
     flex-direction: column;
     align-items: center;
     margin-top: calc(0.2 * 100vh);
-    flex: 1;
-    /* box-sizing: border-box; */
+    width: 600px;
 }
-.header {
+.title {
     font-weight: 700;
-    line-height: 64px;
+    line-height: 72px;
     font-size: 64px;
     margin-bottom: 3rem;
 }
-.subHeader {
-    font-size: 30px;
+.subtitle {
+    font-size: 32px;
     font-weight: 600;
-    line-height: 32px;
     margin-bottom: 3rem;
     color: #414141;
 }
 
-.leftVisual {
-    margin-top: 300px;
-    flex: 1;
-    display: flex;
-    justify-content: center;
-}
-
-.rightVisual {
-    margin-top: 300px;
-    flex: 1;
-    display: flex;
-    justify-content: center;
-}
-
 @media (max-width: 768px) {
     .heroContainer {
-        background-image: none;
+    border-radius: 20px;
     }
     .ctaContainer {
         margin-top: 4rem;
-        padding-left: 20px;
-        padding-right: 20px;
+        width: 90%;
     }
-    .ctaContainer h1 {
-        line-height: 48px;
-        font-size: 45px;
+    .title {
+        line-height: 64px;
+        font-size: 56px;
         margin-bottom: 1.5rem;
     }
-    .ctaContainer h4 {
-        font-size: 25px;
+    .subtitle {
+        font-size: 26px;
         line-height: 32px;
         margin-bottom: 1.5rem;
-    }
-    .leftVisual, .rightVisual {
-        display: none;
     }
 }

@@ -4,11 +4,11 @@ import styles from './style.module.scss';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
-type CreateProps = {
+type SpaceProps = {
   triggerRef: RefObject<HTMLDivElement>;
 };
 
-export default function Create({ triggerRef }: CreateProps) {
+export default function Space({ triggerRef }: SpaceProps) {
   const mainRef = useRef(null);
 
   useEffect(() => {
@@ -105,7 +105,7 @@ export default function Create({ triggerRef }: CreateProps) {
 
   return (
     <div ref={mainRef} className={styles.main}>
-      <h1>Create animation placeholder</h1>
+      <h1>Space animation placeholder</h1>
     </div>
   );
 }

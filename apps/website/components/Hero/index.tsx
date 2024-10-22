@@ -3,73 +3,81 @@ import classNames from 'classnames';
 import gsap from 'gsap';
 import styles from './style.module.css';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { useLayoutEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 
 export default function Index() {
+  const mainRef = useRef(null);
   const heroRef = useRef(null);
   const titleRef = useRef(null);
   const subTitleRef = useRef(null);
 
+  // const title = 'Manage Your Shared Finance';
+  // const subtitle =
+  //   'Easily track and manage your spending through a common space';
+  const title = 'Shared Spending, Simplified';
   const subtitle =
-    'Easily track and manage your spendings through a common space';
+    'Track and manage shared expenses effortlessly—no need for a joint account';
 
-  useLayoutEffect(() => {
-    // section loading animation
-    gsap.fromTo(
-      heroRef.current,
-      {
-        y: 20,
-      },
-      {
-        y: 0,
-        duration: 0.5,
+  useEffect(() => {
+    gsap.registerPlugin(ScrollTrigger);
+    // title and subtitle loading animation
+    const mm = gsap.matchMedia();
 
-        ease: 'power2.in',
-      }
-    );
+    mm.add('(min-width: 769px)', () => {
+      gsap.to(mainRef.current, {
+        padding: 30,
+        duration: 1,
+        ease: 'power2.out',
+      });
+    }).add('(max-width: 768px)', () => {
+      gsap.to(mainRef.current, {
+        padding: 10,
+        duration: 1,
+        ease: 'power2.out',
+      });
+    });
 
-    // individual loading animation
     gsap.fromTo(
       titleRef.current,
-      { y: 20, opacity: 0 },
-      { y: 0, opacity: 1, duration: 1, ease: 'power2.inOut' }
+      { opacity: 0 },
+      { opacity: 1, duration: 0.7, ease: 'power2.inOut' }
     );
     gsap.fromTo(
       subTitleRef.current,
-      { y: 15, opacity: 0 },
-      { y: 0, opacity: 1, duration: 1, ease: 'power2.inOut' }
+      { opacity: 0 },
+      { opacity: 1, duration: 0.7, ease: 'power2.inOut' }
     );
 
     return () => {
       // Cleanup ScrollTrigger instances
       ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
     };
-  });
+  }, []);
 
   return (
-    <div className={styles.heroContainer} ref={heroRef} data-scroll-section>
-      <div className={classNames(styles.leftVisual)}></div>
-      <section className={styles.ctaContainer}>
-        <div className={styles.titles}></div>
-        <h1
-          ref={titleRef}
-          className={classNames(styles.header)}
-          data-scroll
-          data-scroll-speed="0.3"
-        >
-          Manage Your Shared Finance
-        </h1>
-        <div className={styles.subtitles}></div>
-        <h4
-          ref={subTitleRef}
-          className={classNames(styles.subHeader)}
-          data-scroll
-          data-scroll-speed="0.2"
-        >
-          Easily track and manage your spendings through a common space
-        </h4>
-      </section>
-      <div className={classNames(styles.rightVisual)}></div>
-    </div>
+    <main className={styles.main} ref={mainRef}>
+      <div className={styles.heroContainer} ref={heroRef} data-scroll-section>
+        <section className={styles.ctaContainer}>
+          <div className={styles.titles}></div>
+          <h1
+            ref={titleRef}
+            className={classNames(styles.title)}
+            data-scroll
+            data-scroll-speed="0.2"
+          >
+            {title}
+          </h1>
+          <div className={styles.subtitles}></div>
+          <h4
+            ref={subTitleRef}
+            className={classNames(styles.subtitle)}
+            data-scroll
+            data-scroll-speed="0.2"
+          >
+            {subtitle}
+          </h4>
+        </section>
+      </div>
+    </main>
   );
 }
