@@ -1,27 +1,74 @@
 'use client';
-import { RefObject, useEffect, useRef } from 'react';
-import styles from './style.module.scss';
+import { RefObject, useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+import styles from './style.module.scss';
 
 type ScanProps = {
   triggerRef: RefObject<HTMLDivElement>;
 };
 
 export default function Scan({ triggerRef }: ScanProps) {
+  const [isOpen, setIsOpen] = useState(false);
   const mainRef = useRef(null);
-  const glowingLine = useRef(null);
+  const containerRef = useRef(null);
+  const blurRef = useRef(null);
+  const glowingLineRef = useRef(null);
+  const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
 
   useEffect(() => {
-    gsap.registerPlugin(ScrollTrigger);
-
-    const lineAnimation = gsap.to(glowingLine.current, {
+    const lineAnimation = gsap.to(glowingLineRef.current, {
       top: '100%',
       duration: 3,
       ease: 'power1.out',
+      delay: 0.3,
       paused: true,
     });
+
+    const capture = gsap.timeline({
+      paused: true,
+    });
+
+    capture
+      .to(blurRef.current, {
+        opacity: 0.5,
+        duration: 0.5,
+        ease: 'power4.in',
+      })
+      .to(blurRef.current, {
+        opacity: 0,
+        duration: 0.5,
+        ease: 'power4.in',
+      })
+      .to(blurRef.current, {
+        opacity: 0.4,
+        duration: 0.5,
+        ease: 'power4.in',
+      })
+      .to(blurRef.current, {
+        delay: 0.5,
+        opacity: 1,
+        duration: 0.1,
+        ease: 'power4.in',
+      })
+      .to(blurRef.current, {
+        opacity: 0.3,
+        duration: 0.1,
+        ease: 'power2.out',
+      })
+      .to(blurRef.current, {
+        opacity: 0,
+        duration: 0.1,
+        ease: 'power2.inOut',
+      });
+    // .to(glowingLineRef.current, {
+    //   top: '100%',
+    //   duration: 3,
+    //   ease: 'power1.inOut',
+    //   delay: 0.3,
+    // });
 
     const mm = gsap.matchMedia();
 
@@ -31,84 +78,48 @@ export default function Scan({ triggerRef }: ScanProps) {
         start: 'top center',
         end: 'bottom center',
         onEnter: () => {
-          gsap.to(mainRef.current, {
-            width: '100%',
-            height: '100%',
-            opacity: 1,
-            duration: 0.5,
-          });
-          lineAnimation.restart();
+          setIsOpen(true);
+          capture.restart();
+          // lineAnimation.restart();
         },
         onEnterBack: () => {
-          gsap.to(mainRef.current, {
-            width: '100%',
-            height: '100%',
-            opacity: 1,
-            duration: 0.5,
-          });
-          lineAnimation.restart();
+          setIsOpen(true);
+          capture.restart();
+          // lineAnimation.restart();
         },
         onLeave: () => {
-          gsap.to(mainRef.current, {
-            width: '0',
-            height: '0',
-            opacity: 0,
-            duration: 0.5,
-          });
-          lineAnimation.pause();
+          capture.pause();
+          // lineAnimation.pause();
+          setIsOpen(false);
         },
         onLeaveBack: () => {
-          gsap.to(mainRef.current, {
-            width: '0',
-            height: '0',
-            opacity: 0,
-            duration: 0.5,
-          });
-          lineAnimation.pause();
+          capture.pause();
+          // lineAnimation.pause();
+          setIsOpen(false);
         },
       });
     });
 
-    mm.add('(max-width: 769px)', () => {
+    mm.add('(max-width: 768px)', () => {
       ScrollTrigger.create({
         trigger: triggerRef.current,
         start: 'top top',
         end: 'bottom top',
         onEnter: () => {
-          gsap.to(mainRef.current, {
-            width: '100%',
-            height: '100%',
-            opacity: 1,
-            duration: 0.5,
-          });
+          setIsOpen(true);
           lineAnimation.restart();
         },
         onEnterBack: () => {
-          gsap.to(mainRef.current, {
-            width: '100%',
-            height: '100%',
-            opacity: 1,
-            duration: 0.5,
-          });
+          setIsOpen(true);
           lineAnimation.restart();
         },
         onLeave: () => {
-          gsap.to(mainRef.current, {
-            width: '0',
-            height: '0',
-            opacity: 0,
-            duration: 0.5,
-          });
           lineAnimation.pause();
+          setIsOpen(false);
         },
         onLeaveBack: () => {
-          gsap.to(mainRef.current, {
-            width: '0',
-            height: '0',
-            opacity: 0,
-            duration: 0.5,
-          });
           lineAnimation.pause();
+          setIsOpen(false);
         },
       });
     });
@@ -117,20 +128,79 @@ export default function Scan({ triggerRef }: ScanProps) {
       if (ScrollTrigger) {
         ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
       }
+      mm.revert();
     };
-  }, [triggerRef]);
+  }, [triggerRef, containerRef, glowingLineRef]);
+
+  useEffect(() => {
+    if (isOpen) {
+      gsap.set(mainRef.current, { display: 'flex' });
+      gsap.fromTo(
+        mainRef.current,
+        {
+          width: '70%',
+          height: '70%',
+          left: '100%',
+        },
+        {
+          width: '100%',
+          height: '100%',
+          left: 0,
+          // opacity: 1,
+          duration: 0.5,
+          // delay: 0.2,
+          ease: 'power1.inOut',
+        }
+      );
+    } else {
+      gsap.to(mainRef.current, {
+        width: '70%',
+        height: '70%',
+        left: '-100%',
+        // opacity: 0.5,
+        duration: 0.5,
+        // delay: 0.2,
+        ease: 'power2.in',
+        onComplete: () => {
+          gsap.set(mainRef.current, { display: 'none' });
+        },
+      });
+    }
+  }, [isOpen]);
+
+  useEffect(() => {
+    // image dimensions update funciton
+    const updateDimensions = () => {
+      if (containerRef.current) {
+        const { clientWidth, clientHeight } = containerRef.current;
+        setDimensions({
+          width: clientWidth * 0.8,
+          height: clientHeight * 0.5,
+        });
+      }
+    };
+
+    updateDimensions();
+    window.addEventListener('resize', updateDimensions);
+
+    return () => window.removeEventListener('resize', updateDimensions);
+  }, []);
 
   return (
     <div ref={mainRef} className={styles.main}>
-      <Image
-        src="\homemade-Receipt.svg"
-        alt="Receipt"
-        width={450}
-        height={900}
-        quality={80}
-        priority
-      />
-      <div className={styles['glowing-line']} ref={glowingLine}></div>
+      <div className={styles.container} ref={containerRef}>
+        <Image
+          src="\receipt.svg"
+          alt="Receipt"
+          width={dimensions.width}
+          height={dimensions.height}
+          className={styles.receipt}
+          priority
+        />
+        <div className={styles.blur} ref={blurRef}></div>
+        <div className={styles['glowing-line']} ref={glowingLineRef}></div>
+        <div className={styles.ring}></div>
+      </div>
     </div>
   );
 }

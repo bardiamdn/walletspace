@@ -6,6 +6,7 @@ import Header from '../components/Header';
 import Hero from '../components/Hero';
 import Features from '../components/Features';
 import Footer from '../components/Footer';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 export default function Index() {
   const scrollRef = useRef(null);
@@ -15,6 +16,8 @@ export default function Index() {
       const LocomotiveScroll = (await import('locomotive-scroll')).default;
       const locoScroll = new LocomotiveScroll();
     })();
+
+    gsap.registerPlugin(ScrollTrigger);
 
     gsap.fromTo(
       '.main',

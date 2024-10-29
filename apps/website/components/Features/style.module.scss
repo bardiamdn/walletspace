@@ -54,6 +54,7 @@ $border-color-light: #949494;
   }
   .animationContainer {
     position: sticky;
+    overflow: hidden;
     border-radius: 40px;
     background: linear-gradient(to bottom, #cfdbe27e, #97c2db7e);
     top: 50%;
@@ -61,19 +62,10 @@ $border-color-light: #949494;
     height: 100px;
     width: 100%;
     padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     border: 3px solid #3b3b3b;
-
-    .animation {
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      width: 100%;
-      height: 100%;
-      padding: 0;
-      justify-content: center;
-      align-items: center;
-      overflow: hidden;
-    }
   }
 }
 

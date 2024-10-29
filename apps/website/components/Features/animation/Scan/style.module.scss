@@ -1,25 +1,88 @@
 .main {
-  position: relative;
-  background-color: #8a8a8a;
-  width: 0;
-  height: 0;
-  opacity: 0;
+  position: fixed;
+  // background-color: #8a8a8a;
+  width: 70%;
+  height: 70%;
+  left: 100%;
+  // top: 0;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   border-radius: 25px;
-  overflow: hidden;
-}
 
-.glowing-line {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 4px;
-  background: rgba(0, 255, 0, 0.8);
-  box-shadow: 0 0 15px 5px rgba(0, 255, 0, 0.5);
-  z-index: 2;
+  .container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    .receipt {
+      position: absolute;
+      height: 100%;
+      width: 80;
+      top: 50%;
+      left: 50%;
+      transform: rotateZ(-15deg);
+      transform: translate(-150%, 150%) rotateZ(-30deg);
+      animation: tiltCamera 2s ease-out forwards;
+    }
+    @keyframes tiltCamera {
+      0% {
+        transform: translate(-150%, 150%) rotateZ(-15deg);
+      }
+      50% {
+        transform: translate(-40%, -10%) rotateZ(-1deg);
+      }
+      100% {
+        transform: translate(-50%, -50%) rotateZ(0deg);
+      }
+    }
+    .blur {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: #fff;
+      opacity: 0;
+    }
+    .glowing-line {
+      // content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: #00aeffcc;
+      box-shadow: 0 0 15px 5px #00aeffcc;
+      z-index: 2;
+    }
+    .ring {
+      position: absolute;
+      top: 85%;
+      width: 60px;
+      height: 60px;
+      border: 8px solid #272727e7;
+      border-radius: 50%;
+      box-shadow: 0 0 15px rgba(131, 131, 131, 0.589);
+      animation: ringPulse 2s infinite ease-in-out;
+    }
+
+    @keyframes ringPulse {
+      0%,
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+      50% {
+        transform: scale(1.05);
+        opacity: 0.8;
+      }
+    }
+  }
 }
