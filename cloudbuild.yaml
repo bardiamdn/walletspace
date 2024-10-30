@@ -20,8 +20,5 @@ steps:
         '--allow-unauthenticated',
       ]
 
-timeout: '1200s'
-
 options:
-  logging:
-    default_logs_bucket_behavior: 'REGIONAL_USER_OWNED_BUCKET'
+  logging: CLOUD_LOGGING_ONLY

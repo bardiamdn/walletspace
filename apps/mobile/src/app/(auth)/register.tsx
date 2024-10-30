@@ -1,5 +1,13 @@
 import React, { useState } from 'react';
-import { View, Text, Pressable, StyleSheet, StatusBar, Alert, useColorScheme } from 'react-native';
+import {
+  View,
+  Text,
+  Pressable,
+  StyleSheet,
+  StatusBar,
+  Alert,
+  useColorScheme,
+} from 'react-native';
 import { Link } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -8,17 +16,18 @@ import FloatingLabelInput from '@/components/FloatingLabelInput';
 import AnimatedLink from '@/components/AuthNavLink';
 import SubmitButton from '@/components/AuthSubmitButton';
 import { useAuth } from '@/context/AuthContext';
+import { useColors } from '@/context/ColorContext';
 
-const registerUrl = process.env.EXPO_PUBLIC_API_URL_DEV + '/auth/register'
+const registerUrl = process.env.EXPO_PUBLIC_API_URL_DEV + '/auth/register';
 
 const SignIn = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [screenPressed, setScreenPressed] = useState<boolean>(false);
   const { authenticated, setAuthenticated } = useAuth();
 
   const colorScheme = useColorScheme();
-  const colors = colorScheme === 'dark' ? Colors.dark : Colors.light;
+  const { colors } = useColors();
 
   const handleScreenPress = () => {
     setScreenPressed(true);
@@ -32,7 +41,6 @@ const SignIn = () => {
     }
     if (data?.authInfo.token) {
       Alert.alert('Success', 'Sign in after confirming your email');
-      
     } else {
       Alert.alert('Error', 'Unexpected response from server');
     }
@@ -40,10 +48,16 @@ const SignIn = () => {
 
   return (
     <>
-      <StatusBar barStyle={colorScheme === 'dark' ? 'light-content' : 'dark-content'} />
-      <Pressable  onPress={handleScreenPress} style={{ flex: 1 }}>
-        <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
-          <Text style={[styles.title, { color: colors.textPrimary }]}>Register</Text>
+      <StatusBar
+        barStyle={colorScheme === 'dark' ? 'light-content' : 'dark-content'}
+      />
+      <Pressable onPress={handleScreenPress} style={{ flex: 1 }}>
+        <SafeAreaView
+          style={[styles.container, { backgroundColor: colors.background }]}
+        >
+          <Text style={[styles.title, { color: colors.textPrimary }]}>
+            Register
+          </Text>
           <View style={styles.form}>
             <FloatingLabelInput
               label="Email"
@@ -52,7 +66,7 @@ const SignIn = () => {
               keyboardType="email-address"
               autoCapitalize="none"
               screenPressed={screenPressed}
-              />
+            />
             <FloatingLabelInput
               label="Password"
               value={password}
@@ -61,16 +75,18 @@ const SignIn = () => {
               autoCapitalize="none"
               screenPressed={screenPressed}
             />
-            <SubmitButton 
-              text='Register' 
-              method='POST' 
-              url={registerUrl} 
-              requestBody={{ email, password}} 
+            <SubmitButton
+              text="Register"
+              method="POST"
+              url={registerUrl}
+              requestBody={{ email, password }}
               onResponse={handleResponse}
             />
           </View>
-          <AnimatedLink link={'/signin'} text={"Already have an account? Sign in"} >
-          </AnimatedLink>
+          <AnimatedLink
+            link={'/signin'}
+            text={'Already have an account? Sign in'}
+          ></AnimatedLink>
         </SafeAreaView>
       </Pressable>
     </>

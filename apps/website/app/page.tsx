@@ -1,12 +1,12 @@
 'use client';
-import { useLayoutEffect, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 import Header from '../components/Header';
 import Hero from '../components/Hero';
 import Features from '../components/Features';
 import Footer from '../components/Footer';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 export default function Index() {
   const scrollRef = useRef(null);
@@ -17,6 +17,8 @@ export default function Index() {
       const locoScroll = new LocomotiveScroll();
     })();
 
+    gsap.registerPlugin(ScrollTrigger);
+
     gsap.fromTo(
       '.main',
       {
@@ -26,7 +28,7 @@ export default function Index() {
       {
         // y: 0,
         opacity: 1,
-        duration: 0.5,
+        duration: 0.25,
         ease: 'power2.in',
       }
     );

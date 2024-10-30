@@ -39,6 +39,7 @@ desktop.ini
 *.env.development
 *.env.staging
 *.env.production
+wrangler.toml
 
 # Secrets
 /secrets/

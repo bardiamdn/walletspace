@@ -1,6 +1,14 @@
 import React, { useRef, useState } from 'react';
-import { Text, Pressable, StyleSheet, Animated, useColorScheme, ViewStyle, ActivityIndicator } from 'react-native';
+import {
+  Text,
+  Pressable,
+  StyleSheet,
+  Animated,
+  ViewStyle,
+  ActivityIndicator,
+} from 'react-native';
 import { Colors } from '@/constants/Colors';
+import { useColors } from '@/context/ColorContext';
 
 interface SubmitButtonProps {
   text: string;
@@ -11,10 +19,15 @@ interface SubmitButtonProps {
   style?: ViewStyle;
 }
 
-const SubmitButton: React.FC<SubmitButtonProps> = ({ text, url, method, requestBody, onResponse, style }) => {
-  const colorScheme = useColorScheme();
-  const colors = colorScheme === 'dark' ? Colors.dark : Colors.light;
-
+const SubmitButton: React.FC<SubmitButtonProps> = ({
+  text,
+  url,
+  method,
+  requestBody,
+  onResponse,
+  style,
+}) => {
+  const { colors } = useColors();
   const scaleValue = useRef(new Animated.Value(1)).current;
   const backgroundColorValue = useRef(new Animated.Value(0)).current;
   const [textColor, setTextColor] = useState<string>(colors.textReverse);
@@ -68,7 +81,6 @@ const SubmitButton: React.FC<SubmitButtonProps> = ({ text, url, method, requestB
 
       const data = await response.json();
       if (onResponse) {
-        console.log(data)
         onResponse(data, undefined);
       }
     } catch (error) {
@@ -111,13 +123,16 @@ const SubmitButton: React.FC<SubmitButtonProps> = ({ text, url, method, requestB
       onPress={handleSubmit}
       style={[style, styles.container]}
     >
-      <Animated.View style={[styles.button, { transform: [{ scale: scaleValue }], backgroundColor }]}>
+      <Animated.View
+        style={[
+          styles.button,
+          { transform: [{ scale: scaleValue }], backgroundColor },
+        ]}
+      >
         {loading ? (
           <ActivityIndicator color={colors.textReverse} />
         ) : (
-          <Animated.Text style={styles.buttonText}>
-            {text}
-          </Animated.Text>
+          <Animated.Text style={styles.buttonText}>{text}</Animated.Text>
         )}
       </Animated.View>
     </Pressable>
