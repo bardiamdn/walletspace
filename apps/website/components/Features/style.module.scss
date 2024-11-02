@@ -42,6 +42,7 @@ $border-color-light: #949494;
       font-size: 1.25rem;
       line-height: 1.75rem;
       margin-bottom: 1rem;
+      // list-style-type: disc;
     }
   }
 
@@ -66,6 +67,12 @@ $border-color-light: #949494;
     justify-content: center;
     align-items: center;
     border: 3px solid #3b3b3b;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1400px) {
+  .mainContainer {
+    width: 100%;
   }
 }
 

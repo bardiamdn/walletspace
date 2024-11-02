@@ -4,11 +4,14 @@ import { RefObject, useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import styles from './style.module.scss';
+import Submit from '../../../common/Submit';
+import { useMediaQuery } from '../../../context/MediaQueryContext';
+import { useAnimationContext } from '../../../context/AnimationContext';
 
 type FormProps = {
   desktopSectionRef: RefObject<HTMLFormElement>;
   mobileSectionRef: RefObject<HTMLFormElement>;
-  placeholderRef: RefObject<HTMLFormElement>;
+  // placeholderRef: RefObject<HTMLFormElement>;
   containerRef: RefObject<HTMLFormElement>;
   titlesSectionRef: RefObject<HTMLFormElement>;
   descriptionsSectionRef: RefObject<HTMLFormElement>;
@@ -17,14 +20,13 @@ type FormProps = {
 export default function Form({
   desktopSectionRef,
   mobileSectionRef,
-  placeholderRef,
+  // placeholderRef,
   containerRef,
   titlesSectionRef,
   descriptionsSectionRef,
 }: FormProps) {
-  const [isMobile, setIsMobile] = useState(false);
-  const [isOpen, setIsOpen] = useState(true);
-  const [isLeave, setIsLeave] = useState(false);
+  const { animationState, setAnimationState } = useAnimationContext();
+  const { isMobile } = useMediaQuery();
 
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -71,36 +73,25 @@ export default function Form({
   };
 
   useEffect(() => {
-    // gsap.registerPlugin(ScrollTrigger);
-
-    const mm = gsap.matchMedia();
-
-    mm.add('(min-width: 769px)', () => {
-      setIsMobile(false);
+    if (!isMobile) {
       ScrollTrigger.create({
         trigger: desktopSectionRef.current,
         start: 'top center',
         end: 'bottom center',
         onEnter: () => {
-          setIsOpen(false);
+          setAnimationState('form-scanEnter');
         },
         onEnterBack: () => {
-          setIsOpen(false);
+          setAnimationState('form-manageEnterBack');
         },
         onLeave: () => {
-          setIsLeave(true);
-          setIsOpen(true);
+          setAnimationState('form-manageLeave');
         },
         onLeaveBack: () => {
-          setIsLeave(false);
-          setIsOpen(true);
+          setAnimationState('form-scanLeaveBack');
         },
       });
-    });
-
-    // Animations for mobile screens
-    mm.add('(max-width: 768px)', () => {
-      setIsMobile(true);
+    } else {
       ScrollTrigger.create({
         trigger: mobileSectionRef.current,
         start: 'top top',
@@ -108,18 +99,16 @@ export default function Form({
         scrub: true,
         pin: true,
         onEnter: () => {
-          setIsOpen(false);
+          setAnimationState('form-scanEnter');
         },
         onEnterBack: () => {
-          setIsOpen(false);
+          setAnimationState('form-manageEnterBack');
         },
         onLeave: () => {
-          setIsLeave(true);
-          setIsOpen(true);
+          setAnimationState('form-manageLeave');
         },
         onLeaveBack: () => {
-          setIsLeave(false);
-          setIsOpen(true);
+          setAnimationState('form-scanLeaveBack');
         },
         onUpdate: (self) => {
           const scrollProgress = self.progress;
@@ -131,11 +120,10 @@ export default function Form({
           });
         },
       });
-    });
+    }
 
     return () => {
       ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
-      mm.revert();
     };
   }, [
     desktopSectionRef,
@@ -143,15 +131,24 @@ export default function Form({
     containerRef,
     titlesSectionRef,
     descriptionsSectionRef,
+    isMobile,
+    setAnimationState,
   ]);
 
   useEffect(() => {
-    if (isOpen && !isMobile) {
+    if (
+      (animationState === 'form-manageLeave' ||
+        animationState === 'form-scanLeaveBack') &&
+      !isMobile
+    ) {
       gsap.set(formRef.current, { display: 'flex' });
       gsap.to(containerRef.current, {
         height: '100px',
         width: '100%',
-        transform: isLeave ? 'translateY(0)' : 'translateY(-35vh)',
+        transform:
+          animationState === 'form-manageLeave'
+            ? 'translateY(0)'
+            : 'translateY(-35vh)',
         duration: 0.5,
         delay: 0.2,
         ease: 'power2.inOut',
@@ -163,12 +160,19 @@ export default function Form({
         duration: 0.3,
         ease: 'power2.in',
       });
-    } else if (isOpen && isMobile) {
+    } else if (
+      (animationState === 'form-manageLeave' ||
+        animationState === 'form-scanLeaveBack') &&
+      isMobile
+    ) {
       gsap.set(formRef.current, { display: 'flex' });
       gsap.to(containerRef.current, {
         height: '100px',
         width: '100%',
-        transform: isLeave ? 'translateY(45vh)' : 'translateY(-60vh)',
+        transform:
+          animationState === 'form-manageLeave'
+            ? 'translateY(45vh)'
+            : 'translateY(-60vh)',
         duration: 0.5,
         delay: 0.2,
         ease: 'power2.inOut',
@@ -180,7 +184,10 @@ export default function Form({
         duration: 0.3,
         ease: 'power2.in',
       });
-    } else {
+    } else if (
+      animationState === 'form-scanEnter' ||
+      animationState === 'form-manageEnterBack'
+    ) {
       gsap.to(formRef.current, {
         opacity: 0,
         width: 0,
@@ -198,7 +205,7 @@ export default function Form({
       });
       gsap.set(formRef.current, { display: 'none' });
     }
-  }, [isOpen, isLeave, containerRef, isMobile]);
+  }, [containerRef, isMobile, animationState]);
 
   return (
     <form ref={formRef} className={styles.form} onSubmit={handleSubmit}>
@@ -211,14 +218,15 @@ export default function Form({
         required
         ref={formInputRef}
       />
-      <button
-        type="submit"
+      <Submit
         className={styles.button}
         ref={earlyAccessRef}
         disabled={isLoading}
+        loading={isLoading}
+        error={error ? error : undefined}
       >
-        {isLoading ? 'Submitting...' : <p>Early Access</p>}
-      </button>
+        Early Access
+      </Submit>
       {/* {error && <p className={styles.error}>{error}</p>} */}
     </form>
   );

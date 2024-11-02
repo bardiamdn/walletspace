@@ -1,13 +1,14 @@
 'use client';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styles from './style.module.scss';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
-import Form from './animation/Form';
-import Create from './animation/Create';
-import Scan from './animation/Scan';
-import Space from './animation/Space';
+import Form from './Form';
+import Manage from './Manage';
+import Scan from './Scan';
+import Space from './Space';
+import { AnimationContextProvider } from '../../context/AnimationContext';
 
 export default function Index() {
   const titlesSectionRef = useRef(null);
@@ -20,24 +21,22 @@ export default function Index() {
   const firstTitleRef = useRef(null);
   const secondTitleRef = useRef(null);
   const thirdTitleRef = useRef(null);
-  const fourthTitleRef = useRef(null);
 
   const firstDescriptionRef = useRef(null);
   const secondDescriptionRef = useRef(null);
   const thirdDescriptionRef = useRef(null);
-  const fourthDescriptionRef = useRef(null);
 
   const titles = [
     {
-      title: 'Extract all data by just scanning your receipts',
+      title: 'Effortlessly Scan and Extract Receipt Data',
       ref: firstTitleRef,
     },
     {
-      title: 'Select the items and assign it to your space',
+      title: 'Organize Items and Share with Ease',
       ref: secondTitleRef,
     },
     {
-      title: 'Share or split items',
+      title: 'Manage and Track Shared Spaces',
       ref: thirdTitleRef,
     },
   ];
@@ -45,22 +44,24 @@ export default function Index() {
   const descriptions = [
     {
       descriptionArray: [
-        'Let AI instantly extract items.',
-        'And other related data so you can easily manage all your data.',
+        'Quickly scan your receipts to extract item details.',
+        'Automatically categorize items for easy tracking.',
+        'Gain insights into your spending habits.',
       ],
       ref: firstDescriptionRef,
     },
     {
       descriptionArray: [
-        'Share and split the items with your friends.',
-        'Track your shared spendings.',
+        'Assign items to your shared space effortlessly.',
+        'Easily share and split costs with friends.',
       ],
       ref: secondDescriptionRef,
     },
     {
       descriptionArray: [
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit,',
-        'sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+        'Monitor shared expenses with your friends.',
+        'Keep track of group spending and individual contributions.',
+        'Or use it for personal finance management.',
       ],
       ref: thirdDescriptionRef,
     },
@@ -71,11 +72,9 @@ export default function Index() {
       firstTitleRef,
       secondTitleRef,
       thirdTitleRef,
-      fourthTitleRef,
       firstDescriptionRef,
       secondDescriptionRef,
       thirdDescriptionRef,
-      fourthDescriptionRef,
     ];
 
     const mm = gsap.matchMedia();
@@ -142,17 +141,19 @@ export default function Index() {
         data-scroll-section
       >
         <div className={styles.animationContainer} ref={animationContainerRef}>
-          <Form
-            desktopSectionRef={titlesSectionRef} // titlesSectionRef for better alignment with other animations
-            mobileSectionRef={featuresSectionRef}
-            placeholderRef={animationPlaceholderRef}
-            containerRef={animationContainerRef}
-            titlesSectionRef={titlesSectionRef}
-            descriptionsSectionRef={descriptionsSectionRef}
-          />
-          <Create triggerRef={firstTitleRef} />
-          <Scan triggerRef={secondTitleRef} />
-          <Space triggerRef={thirdTitleRef} />
+          <AnimationContextProvider>
+            <Form
+              desktopSectionRef={titlesSectionRef} // titlesSectionRef for better alignment with other animations
+              mobileSectionRef={featuresSectionRef}
+              // placeholderRef={animationPlaceholderRef}
+              containerRef={animationContainerRef}
+              titlesSectionRef={titlesSectionRef}
+              descriptionsSectionRef={descriptionsSectionRef}
+            />
+            <Scan triggerRef={firstTitleRef} />
+            <Space triggerRef={secondTitleRef} />
+            <Manage triggerRef={thirdTitleRef} />
+          </AnimationContextProvider>
         </div>
       </section>
       <section

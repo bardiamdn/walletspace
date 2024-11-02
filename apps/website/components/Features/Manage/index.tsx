@@ -1,92 +1,90 @@
 'use client';
-import { RefObject, useEffect, useRef, useState } from 'react';
+import { RefObject, useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 import styles from './style.module.scss';
+import { useAnimationContext } from '../../../context/AnimationContext';
+import { useMediaQuery } from '../../../context/MediaQueryContext';
 
 type CreateProps = {
   triggerRef: RefObject<HTMLDivElement>;
 };
 
 export default function Create({ triggerRef }: CreateProps) {
-  const [animationState, setAnimationState] = useState<
-    'Enter' | 'EnterBack' | 'Leave' | 'LeaveBack' | null
-  >(null);
+  const { animationState, setAnimationState } = useAnimationContext();
+  const { isMobile } = useMediaQuery();
   const mainRef = useRef(null);
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const timeRef = useRef(0);
 
   useEffect(() => {
-    const mm = gsap.matchMedia();
-
-    mm.add('(min-width: 769px)', () => {
+    if (!isMobile) {
       ScrollTrigger.create({
         trigger: triggerRef.current,
         start: 'top center',
         end: 'bottom center',
         onEnter: () => {
-          setAnimationState('Enter');
+          setAnimationState('spaceLeave-manageEnter');
         },
         onEnterBack: () => {
-          setAnimationState('EnterBack');
+          setAnimationState('form-manageEnterBack');
         },
         onLeave: () => {
-          setAnimationState('Leave');
+          setAnimationState('form-manageLeave');
         },
         onLeaveBack: () => {
-          setAnimationState('LeaveBack');
+          setAnimationState('spaceEnterBack-manageLeaveback');
         },
       });
-    });
-
-    mm.add('(max-width: 769px)', () => {
+    } else {
       ScrollTrigger.create({
         trigger: triggerRef.current,
         start: 'top top',
         end: 'bottom top',
         onEnter: () => {
-          setAnimationState('Enter');
+          setAnimationState('spaceLeave-manageEnter');
         },
         onEnterBack: () => {
-          setAnimationState('EnterBack');
+          setAnimationState('form-manageEnterBack');
         },
         onLeave: () => {
-          setAnimationState('Leave');
+          setAnimationState('form-manageLeave');
         },
         onLeaveBack: () => {
-          setAnimationState('LeaveBack');
+          setAnimationState('spaceEnterBack-manageLeaveback');
         },
       });
-    });
+    }
 
     return () => {
       if (ScrollTrigger) {
         ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
       }
-      mm.revert();
     };
-  }, [triggerRef]);
+  }, [triggerRef, setAnimationState, isMobile]);
 
   useEffect(() => {
-    if (animationState === 'EnterBack' || animationState === 'Enter') {
+    if (
+      animationState === 'spaceLeave-manageEnter' ||
+      animationState === 'form-manageEnterBack'
+    ) {
       gsap.set(
         mainRef.current,
-        animationState === 'Enter'
+        animationState === 'spaceLeave-manageEnter'
           ? {
-              display: 'flex',
-              width: 0,
-              height: 0,
-              left: '50%',
-              opacity: 0,
-            }
-          : {
               display: 'flex',
               width: '70%',
               height: '70%',
               left: '100%',
               opacity: 1,
+            }
+          : {
+              display: 'flex',
+              width: 0,
+              height: 0,
+              left: '50%',
+              opacity: 0,
             }
       );
       gsap.to(mainRef.current, {
@@ -97,15 +95,17 @@ export default function Create({ triggerRef }: CreateProps) {
         duration: 0.5,
         ease: 'power1.inOut',
       });
-    } else {
+    } else if (
+      animationState === 'form-manageLeave' ||
+      animationState === 'spaceEnterBack-manageLeaveback'
+    ) {
       gsap.to(mainRef.current, {
-        left: animationState === 'Leave' ? '-100%' : '50%',
-        width: animationState === 'Leave' ? '70%' : 0,
-        height: animationState === 'Leave' ? '70%' : 0,
-        opacity: animationState === 'Leave' ? 1 : 0,
+        left: animationState === 'form-manageLeave' ? '50%' : '-100%',
+        width: animationState === 'form-manageLeave' ? 0 : '70%',
+        height: animationState === 'form-manageLeave' ? 0 : '70%',
+        opacity: animationState === 'form-manageLeave' ? 0 : 1,
         duration: 0.5,
         onComplete: () => {
-          setAnimationState(null);
           gsap.set(mainRef.current, {
             display: 'none',
           });

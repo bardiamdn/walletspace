@@ -1,0 +1,24 @@
+.link {
+    position: relative; 
+    display: inline-block; 
+    color: inherit; 
+    text-decoration: none; 
+    overflow: hidden;
+  }
+  
+  .link::after {
+    content: ''; 
+    position: absolute; 
+    left: 0; 
+    bottom: 0; 
+    width: 100%; 
+    height: 2px; 
+    background-color: #313131d8; 
+    transform: translateX(-100%); 
+    transition: transform 0.3s ease; 
+  }
+  
+  .link:hover::after {
+    transform: translateX(0); 
+  }
+  

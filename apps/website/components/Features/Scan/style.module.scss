@@ -1,11 +1,9 @@
 .main {
   position: fixed;
-  // background-color: #8a8a8a;
   width: 70%;
   height: 70%;
   left: 100%;
-  // top: 0;
-  display: flex;
+  display: none;
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -23,12 +21,16 @@
     .receipt {
       position: absolute;
       height: 100%;
-      width: 80;
+      width: 50%;
       top: 50%;
       left: 50%;
+      background-image: url('/receipt.svg');
       transform: rotateZ(-15deg);
       transform: translate(-150%, 150%) rotateZ(-30deg);
       animation: tiltCamera 2s ease-out forwards;
+      background-size: contain;
+      background-position: center;
+      // background-repeat: no-repeat;
     }
     @keyframes tiltCamera {
       0% {
@@ -54,23 +56,55 @@
     .glowing-line {
       // content: '';
       position: absolute;
-      top: 0;
+      top: -100%;
       left: 0;
       width: 100%;
-      height: 4px;
-      background: #00aeffcc;
-      box-shadow: 0 0 15px 5px #00aeffcc;
+      height: 100%;
+      border-bottom: 4px solid #00aeffcc;
+      background: transparent;
+      box-shadow: 0px 5px 15px 0px #00aeffcc;
+      // padding: 20px;
+      overflow: hidden;
       z-index: 2;
+
+      .collection {
+        position: absolute;
+        top: 100%;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-around;
+        background-color: #fff;
+        // z-index: 1;
+      }
+
+      .items {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-radius: 15px;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        padding-right: 20px;
+        padding-left: 20px;
+        // margin: 10px;
+        width: 50%;
+        // height: 50px;
+        border: 2px solid rgba(44, 44, 44, 0.925);
+      }
     }
     .ring {
       position: absolute;
       top: 85%;
-      width: 60px;
-      height: 60px;
+      width: 13%;
+      aspect-ratio: 1/1;
       border: 8px solid #272727e7;
       border-radius: 50%;
       box-shadow: 0 0 15px rgba(131, 131, 131, 0.589);
       animation: ringPulse 2s infinite ease-in-out;
+      z-index: 1;
     }
 
     @keyframes ringPulse {

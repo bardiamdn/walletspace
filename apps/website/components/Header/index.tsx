@@ -5,6 +5,7 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 import styles from './style.module.css';
+import Link from 'apps/website/common/Link';
 
 export default function Index() {
   const leftDiamondRef = useRef<SVGPathElement | null>(null);
@@ -154,14 +155,14 @@ export default function Index() {
         </svg>
       </a>
       <div className={styles.link}>
-        <a
+        <Link
           className="font-semibold"
           href="https://x.com/thewalletspace"
           target="_blank"
           rel="noopener noreferrer"
         >
           X (Twitter)
-        </a>
+        </Link>
       </div>
     </header>
   );
