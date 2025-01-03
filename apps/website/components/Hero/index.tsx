@@ -25,13 +25,19 @@ export default function Index() {
 
     mm.add('(min-width: 769px)', () => {
       gsap.to(mainRef.current, {
-        padding: 30,
+        paddingLeft: 30,
+        paddingRight: 30,
+        paddingBottom: 30,
+        paddingTop: 60,
         duration: 1,
         ease: 'power2.out',
       });
     }).add('(max-width: 768px)', () => {
       gsap.to(mainRef.current, {
-        padding: 10,
+        paddingLeft: 10,
+        paddingRight: 10,
+        paddingBottom: 10,
+        paddingTop: 50,
         duration: 1,
         ease: 'power2.out',
       });

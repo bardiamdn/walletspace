@@ -5,25 +5,32 @@ $border-color-light: #949494;
 
 // Main Container
 .mainContainer {
+  position: relative;
   display: flex;
-  width: 80%;
+  width: 100%;
   margin: 0;
   z-index: 1;
   height: fit-content;
 
   .titlesContainer,
   .descriptionsContainer {
+    position: relative;
     display: flex;
     flex: 1;
     height: 300vh;
+    width: 100%;
     flex-direction: column;
   }
 
   .titleContainer {
-    height: 100vh;
+    // height: 100vh;
+    width: 450px;
+    height: 100%;
     display: flex;
     align-items: center;
-    padding-right: 40px;
+    // padding-right: 40px;
+    position: relative;
+    opacity: 0;
 
     h3 {
       text-align: center;
@@ -34,24 +41,28 @@ $border-color-light: #949494;
 
   .descriptionContainer {
     height: 100vh;
+    width: 450px;
     display: flex;
     align-items: center;
-    padding-left: 40px;
+    // padding-left: 40px;
+    opacity: 0;
 
     li {
-      font-size: 1.25rem;
-      line-height: 1.75rem;
+      font-size: 28px;
+      // line-height: 1.75rem;
       margin-bottom: 1rem;
       // list-style-type: disc;
     }
   }
 
-  .animationPlaceholder {
+  .animationWrapper {
     position: relative;
-    display: flex;
-    justify-content: center;
-    flex: 1;
-    height: 340vh;
+    // display: flex;
+    // justify-content: center;
+    // align-items: center;
+    // flex: 1;
+    width: 500px;
+    height: 300vh;
   }
   .animationContainer {
     position: sticky;
@@ -60,8 +71,9 @@ $border-color-light: #949494;
     background: linear-gradient(to bottom, #cfdbe27e, #97c2db7e);
     top: 50%;
     transform: translateY(-35vh);
-    height: 100px;
+    height: 100px; /* 600px; when entering features section */
     width: 100%;
+    // aspect-ratio: 5/6;
     padding: 20px;
     display: flex;
     justify-content: center;
@@ -75,6 +87,34 @@ $border-color-light: #949494;
     width: 100%;
   }
 }
+@media (max-width: 1250px) {
+  .mainContainer .titleContainer {
+    width: 300px;
+    h3 {
+      font-size: 30px;
+    }
+  }
+  .mainContainer .descriptionContainer {
+    width: 300px;
+    li {
+      font-size: 20px;
+    }
+  }
+}
+@media (max-width: 900px) {
+  .mainContainer .titleContainer {
+    width: 230px;
+    h3 {
+      font-size: 25px;
+    }
+  }
+  .mainContainer .descriptionContainer {
+    width: 230px;
+    li {
+      font-size: 17px;
+    }
+  }
+}
 
 @media (max-width: 768px) {
   .mainContainer {
@@ -83,21 +123,25 @@ $border-color-light: #949494;
     height: 100vh;
     margin-bottom: 100vh;
 
-    .titlesContainer,
-    .descriptionsContainer {
+    .titlesContainer {
       height: 25vh;
       overflow-y: hidden;
       flex: 1;
     }
-    .animationPlaceholder {
-      height: 50vh;
-      flex: 2;
+    .descriptionsContainer {
+      display: none;
+    }
+    .animationWrapper {
+      height: 100%;
+      width: 100%;
+      // flex: 2;
     }
 
     .animationContainer {
-      max-width: 90%;
-      min-width: 200px;
-      transform: translateY(-60vh);
+      // max-width: 90%;
+      // min-width: 200px;
+      width: 100%;
+      transform: translateY(-20vh);
     }
 
     .titleContainer,

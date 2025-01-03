@@ -77,7 +77,8 @@ export default function Form({
       ScrollTrigger.create({
         trigger: desktopSectionRef.current,
         start: 'top center',
-        end: 'bottom center',
+        end: 'bottom 60%',
+        // markers: true,
         onEnter: () => {
           setAnimationState('form-scanEnter');
         },
@@ -172,7 +173,7 @@ export default function Form({
         transform:
           animationState === 'form-manageLeave'
             ? 'translateY(45vh)'
-            : 'translateY(-60vh)',
+            : 'translateY(-20vh)',
         duration: 0.5,
         delay: 0.2,
         ease: 'power2.inOut',
@@ -196,7 +197,7 @@ export default function Form({
         ease: 'power2.in',
       });
       gsap.to(containerRef.current, {
-        height: isMobile ? '100%' : '60vh',
+        height: isMobile ? '100%' : '600px',
         width: '100%',
         transform: isMobile ? 'translateY(0)' : 'translateY(-50%)',
         duration: 0.5,
