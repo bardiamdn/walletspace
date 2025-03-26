@@ -95,8 +95,8 @@ export default function Index() {
         timeline
           .to(title.ref.current, {
             motionPath: {
-              path: leftCurvePath,
-              align: leftCurvePath,
+              path: leftCurvePath || '',
+              align: leftCurvePath || '',
               alignOrigin: [0.5, 0.5],
               end: 0.5, // Stop at the middle of the path
             },
@@ -107,8 +107,8 @@ export default function Index() {
           // Animate out of the middle
           .to(title.ref.current, {
             motionPath: {
-              path: leftCurvePath,
-              align: leftCurvePath,
+              path: leftCurvePath || '',
+              align: leftCurvePath || '',
               alignOrigin: [0.5, 0.5],
               start: 0.5, // Start from the middle of the path
               end: 1, // Finish the rest of the path
@@ -137,8 +137,8 @@ export default function Index() {
         timeline
           .to(description.ref.current, {
             motionPath: {
-              path: rightCurvePath,
-              align: rightCurvePath,
+              path: rightCurvePath || '',
+              align: rightCurvePath || '',
               alignOrigin: [0.5, 0.5],
               end: 0.5, // Stop at the middle of the path
             },
@@ -149,8 +149,8 @@ export default function Index() {
           // Animate out of the middle
           .to(description.ref.current, {
             motionPath: {
-              path: rightCurvePath,
-              align: rightCurvePath,
+              path: rightCurvePath || '',
+              align: rightCurvePath || '',
               alignOrigin: [0.5, 0.5],
               start: 0.5, // Start from the middle of the path
               end: 1, // Finish the rest of the path

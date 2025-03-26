@@ -97,7 +97,16 @@ export default function Scan({ triggerRef }: ScanProps) {
 
   return (
     <div ref={mainRef} className={styles.main}>
-      <div className={styles.container} ref={containerRef}></div>
+      <div className={styles.container} ref={containerRef}>
+        <div className="relative w-full h-full mt-[50px]">
+          <Image
+            src="/items-screen.png"
+            alt="extracted items from scanned receipt"
+            fill
+            className="object-contain"
+          />
+        </div>
+      </div>
     </div>
   );
 }

@@ -5,6 +5,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useMediaQuery } from '../../../context/MediaQueryContext';
 import { useAnimationContext } from '../../../context/AnimationContext';
+import Image from 'next/image';
 
 type SpaceProps = {
   triggerRef: RefObject<HTMLDivElement>;
@@ -105,7 +106,16 @@ export default function Space({ triggerRef }: SpaceProps) {
 
   return (
     <div ref={mainRef} className={styles.main}>
-      <h1>Space animation placeholder</h1>
+      <div className={styles.container} >
+      <div className="relative w-full h-full mt-[50px]">
+        <Image
+          src="/contact-screen.png"
+          alt="contacts page screenshot"
+          fill
+          className="object-contain"
+        />
+      </div>
+      </div>
     </div>
   );
 }

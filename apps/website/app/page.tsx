@@ -41,7 +41,7 @@ export default function Index() {
     <MediaQueryProvider>
       <main
         ref={scrollRef}
-        className="flex flex-col items-center main"
+        className="md:flex flex-col items-center main hidden"
         data-scroll-container
       >
         <Header />
@@ -49,6 +49,9 @@ export default function Index() {
         <Features />
         <Footer />
       </main>
+      <div className="flex md:hidden h-screen justify-center items-center">
+        <h3>Open the website on your computer</h3>
+      </div>
     </MediaQueryProvider>
   );
 }

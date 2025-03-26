@@ -6,6 +6,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import styles from './style.module.scss';
 import { useAnimationContext } from '../../../context/AnimationContext';
 import { useMediaQuery } from '../../../context/MediaQueryContext';
+import Image from 'next/image';
 
 type CreateProps = {
   triggerRef: RefObject<HTMLDivElement>;
@@ -164,7 +165,15 @@ export default function Create({ triggerRef }: CreateProps) {
 
   return (
     <div ref={mainRef} className={styles.main}>
-      <canvas ref={canvasRef} />
+      {/* <canvas ref={canvasRef} /> */}
+      <div className="relative w-full h-full mt-[50px]">
+        <Image
+          src="/home-screen.png"
+          alt="contacts page screenshot"
+          fill
+          className="object-contain"
+        />
+      </div>
     </div>
   );
 }

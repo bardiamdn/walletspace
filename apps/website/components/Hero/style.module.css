@@ -16,7 +16,7 @@
     height: 100%;
     z-index: 0;
     overflow: hidden;
-    background-image: url('/hero-demo-4.svg');
+    /* background-image: url('/hero-demo-4.svg'); */
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
